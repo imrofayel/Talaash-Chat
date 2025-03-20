@@ -3,16 +3,36 @@
 import { useState } from "react";
 import { Markdown } from "@/components/ui/markdown";
 import { Button } from "@/components/ui/button";
-import { EyeIcon, Sparkles } from "lucide-react";
+import { EyeIcon, Sparkles, CopyIcon, CheckIcon } from "lucide-react";
 import { ChatMessage } from "@/types/chat";
 import { parseThinking } from "@/lib/parse-thinking";
+import { Highlighter } from "shiki";
 
-interface MessageProps {
+export interface MessageProps {
   message: ChatMessage;
+  highlighter: Highlighter | null;
 }
 
-export function Message({ message }: MessageProps) {
+export function Message({ message, highlighter }: MessageProps) {
   const [showThinking, setShowThinking] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const CopyButton = ({ text }: { text: string }) => (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="h-6 w-6 absolute top-2 right-2"
+      onClick={() => handleCopy(text)}
+    >
+      {copied ? <CheckIcon className="h-3 w-3" /> : <CopyIcon className="h-3 w-3" />}
+    </Button>
+  );
 
   // Parse thinking content from message
   const { thinking, response } = parseThinking(message.content);
@@ -21,9 +41,10 @@ export function Message({ message }: MessageProps) {
   if (message.role === "user") {
     return (
       <div className="mb-6 flex flex-col items-end">
-        <div className="rounded-lg px-4 py-2 bg-primary/90 text-primary-foreground">
+        <div className="rounded-lg px-4 py-2 bg-primary/90 text-primary-foreground relative">
+          <CopyButton text={message.content} />
           <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-            <Markdown>{message.content}</Markdown>
+            <Markdown highlighter={highlighter}>{message.content}</Markdown>
           </div>
         </div>
       </div>
@@ -48,9 +69,12 @@ export function Message({ message }: MessageProps) {
       ) : (
         // Completed response state
         <div className="flex flex-col gap-2 w-full">
-          <div className="rounded-lg px-4 py-2 bg-secondary/80 backdrop-blur-sm">
+          <div className="rounded-lg px-4 py-2 bg-secondary/80 backdrop-blur-sm relative">
+            <CopyButton text={showThinking ? thinking || "" : response} />
             <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-              <Markdown>{showThinking ? thinking || "" : response}</Markdown>
+              <Markdown highlighter={highlighter}>
+                {showThinking ? thinking || "" : response}
+              </Markdown>
             </div>
           </div>
           {hasThinking && (

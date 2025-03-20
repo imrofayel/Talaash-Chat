@@ -40,6 +40,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      highlight.js:
+        specifier: ^11.11.1
+        version: 11.11.1
       lucide-react:
         specifier: ^0.477.0
         version: 0.477.0(react@19.0.0)
@@ -73,6 +76,9 @@ importers:
       shiki:
         specifier: ^3.1.0
         version: 3.1.0
+      shiki-stream:
+        specifier: ^0.1.1
+        version: 0.1.1(react@19.0.0)
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.0.2
@@ -2454,6 +2460,13 @@ packages:
         integrity: sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==,
       }
 
+  highlight.js@11.11.1:
+    resolution:
+      {
+        integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==,
+      }
+    engines: { node: ">=12.0.0" }
+
   html-url-attributes@3.0.1:
     resolution:
       {
@@ -3944,6 +3957,20 @@ packages:
         integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==,
       }
     engines: { node: ">=8" }
+
+  shiki-stream@0.1.1:
+    resolution:
+      {
+        integrity: sha512-3WmzSq1Gi9Avv8QIowmMUjmU07YkC8VB3J4z/uDLb0TFEKbBeJgsjMIeF2SXvGyHe7bmRaBar6rbLXjStNVFKA==,
+      }
+    peerDependencies:
+      react: ^19.0.0
+      vue: ^3.2.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      vue:
+        optional: true
 
   shiki@3.1.0:
     resolution:
@@ -6084,6 +6111,8 @@ snapshots:
     dependencies:
       "@types/hast": 3.0.4
 
+  highlight.js@11.11.1: {}
+
   html-url-attributes@3.0.1: {}
 
   html-void-elements@3.0.0: {}
@@ -7192,6 +7221,12 @@ snapshots:
       shebang-regex: 3.0.0
 
   shebang-regex@3.0.0: {}
+
+  shiki-stream@0.1.1(react@19.0.0):
+    dependencies:
+      "@shikijs/core": 3.1.0
+    optionalDependencies:
+      react: 19.0.0
 
   shiki@3.1.0:
     dependencies:
