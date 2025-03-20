@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { message, mode = "chat" } = await req.json();
+    const { message, model = "deepseek/deepseek_v3" } = await req.json();
 
     const response = await openai.chat.completions.create({
       messages: [
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
           content: message,
         },
       ],
-      model: mode === "chat" ? "deepseek/deepseek_v3" : "deepseek/deepseek-r1",
+      model: model,
       stream: true,
       //   max_tokens: 2048,
       //   temperature: 1,

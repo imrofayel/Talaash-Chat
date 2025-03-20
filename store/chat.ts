@@ -3,6 +3,7 @@ import { ChatMessage } from "@/lib/openai";
 import { nanoid } from "nanoid";
 
 type ChatMode = "chat" | "research";
+type ModelType = string;
 
 type ChatStore = {
   messages: ChatMessage[];
@@ -12,6 +13,8 @@ type ChatStore = {
   setIsStreaming: (streaming: boolean) => void;
   mode: ChatMode;
   setMode: (mode: ChatMode) => void;
+  model: ModelType;
+  setModel: (model: ModelType) => void;
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -30,4 +33,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   setIsStreaming: (streaming) => set({ isStreaming: streaming }),
   mode: "chat", // Default mode is chat
   setMode: (mode) => set({ mode: mode }),
+  model: "deepseek/deepseek_v3", // Default model
+  setModel: (model) => set({ model: model }),
 }));
