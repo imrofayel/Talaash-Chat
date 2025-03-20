@@ -8,7 +8,8 @@ import { useChatStore } from "@/store/chat";
 
 export function ChatInput() {
   const [input, setInput] = useState<string>("");
-  const { isStreaming, setIsStreaming, addMessage, updateLastMessage } = useChatStore();
+  const { isStreaming, setIsStreaming, addMessage, updateLastMessage, mode, setMode } =
+    useChatStore();
   const abortController = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export function ChatInput() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, mode }),
         signal: abortController.current.signal,
       });
 
@@ -81,7 +82,8 @@ export function ChatInput() {
           <Button
             variant="ghost"
             aria-label="Chat"
-            className="h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-1.5 text-sm font-normal [&_svg]:size-5.5 opacity-65 cursor-pointer hover:bg-black/10 rounded-md"
+            className={`h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-1.5 text-sm font-normal [&_svg]:size-5.5 cursor-pointer hover:bg-black/10 rounded-md ${mode === "chat" ? "opacity-100 bg-black/10" : "opacity-65"}`}
+            onClick={() => setMode("chat")}
           >
             <MessageCircle />
             Chat
@@ -90,7 +92,8 @@ export function ChatInput() {
           <Button
             variant="ghost"
             aria-label="Research"
-            className="h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-2 text-sm font-normal [&_svg]:size-5.5 opacity-65 cursor-pointer hover:bg-black/10 rounded-md"
+            className={`h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-2 text-sm font-normal [&_svg]:size-5.5 cursor-pointer hover:bg-black/10 rounded-md ${mode === "research" ? "opacity-100 bg-black/10" : "opacity-65"}`}
+            onClick={() => setMode("research")}
           >
             <Atom />
             Research

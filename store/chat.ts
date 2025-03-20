@@ -2,12 +2,16 @@ import { create } from "zustand";
 import { ChatMessage } from "@/lib/openai";
 import { nanoid } from "nanoid";
 
+type ChatMode = "chat" | "research";
+
 type ChatStore = {
   messages: ChatMessage[];
   addMessage: (content: string, role: ChatMessage["role"]) => void;
   updateLastMessage: (content: string) => void;
   isStreaming: boolean;
   setIsStreaming: (streaming: boolean) => void;
+  mode: ChatMode;
+  setMode: (mode: ChatMode) => void;
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -24,4 +28,6 @@ export const useChatStore = create<ChatStore>((set) => ({
     })),
   isStreaming: false,
   setIsStreaming: (streaming) => set({ isStreaming: streaming }),
+  mode: "chat", // Default mode is chat
+  setMode: (mode) => set({ mode: mode }),
 }));
