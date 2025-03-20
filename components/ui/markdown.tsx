@@ -13,8 +13,6 @@ interface MarkdownProps {
 
 type ComponentType = "p" | "code";
 type MarkdownComponentProps<T extends ComponentType> = ComponentProps<T> & {
-  // node?: any;
-  inline?: boolean;
   children?: ReactNode;
 };
 
@@ -26,7 +24,7 @@ export function Markdown({ children, className, highlighter }: MarkdownProps) {
         "prose-headings:text-primary-foreground prose-headings:font-semibold",
         "prose-p:text-secondary-foreground/90 prose-p:leading-relaxed",
         "prose-strong:text-primary-foreground prose-strong:font-semibold",
-        "prose-code:text-primary-foreground prose-code:bg-secondary/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded",
+        "prose-code:text-primary-foreground prose-code:bg-secondary/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:whitespace-normal",
         "prose-pre:bg-secondary/30 prose-pre:border prose-pre:border-secondary",
         "prose-a:text-blue-400 hover:prose-a:text-blue-300",
         "prose-ul:text-secondary-foreground/90 prose-li:text-secondary-foreground/90",
@@ -35,47 +33,43 @@ export function Markdown({ children, className, highlighter }: MarkdownProps) {
     >
       <ReactMarkdown
         components={{
-          code: ({
-            // node,
-            inline,
-            className,
-            children,
-            ...props
-          }: MarkdownComponentProps<"code">) => {
+          p: ({ children, ...props }: MarkdownComponentProps<"p">) => <p {...props}>{children}</p>,
+          code: ({ className, children, ...props }: MarkdownComponentProps<"code">) => {
             if (!children) return null;
+
+            // Handle block code with syntax highlighting
             const match = /language-(\w+)/.exec(className || "");
             const lang = match ? match[1] : "text";
             const content = String(children).replace(/\n$/, "");
 
-            if (!inline && highlighter) {
-              const html = highlighter.codeToHtml(content, {
-                lang: lang || "text",
-                theme: "github-dark",
-              });
-
-              // Use div instead of pre to avoid nesting issues
+            if (lang === "text") {
               return (
-                <div
-                  className="not-prose"
+                <code className="!inline bg-secondary/ rounded bg-white text-black !font-mono">
+                  {content}
+                </code>
+              );
+            }
+
+            if (highlighter && lang !== "text") {
+              return (
+                <code
                   dangerouslySetInnerHTML={{
-                    __html: html,
+                    __html: highlighter.codeToHtml(content, {
+                      lang: lang || "text",
+                      theme: "github-dark",
+                    }),
                   }}
                 />
               );
             }
 
-            return inline ? (
-              <code className="rounded bg-muted px-1 py-0.5" {...props}>
-                {children}
-              </code>
-            ) : (
-              <div className="not-prose">
-                <pre className="rounded-md bg-muted/50 p-4 overflow-x-auto">
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                </pre>
-              </div>
+            // Fallback for block code without syntax highlighting
+            return (
+              <pre className="rounded-md bg-muted/50 p-4 overflow-x-auto">
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              </pre>
             );
           },
         }}
