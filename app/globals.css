@@ -188,3 +188,20 @@ a {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+@keyframes cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.font-mono {
+  font-feature-settings: "mono" 1;
+}
+
+.thinking-cursor::after {
+  content: '▋';
+  display: inline-block;
+  animation: cursor 1s infinite;
+  margin-left: 2px;
+  color: currentColor;
+}
