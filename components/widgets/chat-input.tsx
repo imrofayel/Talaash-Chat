@@ -2,18 +2,61 @@
 
 import { PromptInput, PromptInputActions, PromptInputTextarea } from "@/components/ui/prompt-input";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Paperclip, Atom } from "lucide-react";
-import { useState } from "react";
+import { MessageCircle, Paperclip, Atom, Send } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { useChatStore } from "@/store/chat";
 
 export function ChatInput() {
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [input, setInput] = useState<string>("");
+  const { isStreaming, setIsStreaming, addMessage, updateLastMessage } = useChatStore();
+  const abortController = useRef<AbortController | null>(null);
 
-  const handleSubmit = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+  useEffect(() => {
+    return () => {
+      abortController.current?.abort();
+    };
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!input.trim() || isStreaming) return;
+
+    // Abort previous request if exists
+    abortController.current?.abort();
+    abortController.current = new AbortController();
+
+    addMessage(input.trim(), "user");
+    setIsStreaming(true);
+    addMessage("", "assistant");
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+        signal: abortController.current.signal,
+      });
+
+      if (!response.ok) throw new Error("Failed to send message");
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader!.read();
+        if (done) break;
+
+        const text = decoder.decode(value, { stream: true });
+        if (text) updateLastMessage(text);
+      }
+
+      setInput("");
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "AbortError") return;
+      console.error("Chat Error:", error);
+      updateLastMessage(" [Error: Message failed to complete]");
+    } finally {
+      setIsStreaming(false);
+    }
   };
 
   const handleValueChange = (value: string) => {
@@ -24,7 +67,7 @@ export function ChatInput() {
     <PromptInput
       value={input}
       onValueChange={handleValueChange}
-      isLoading={isLoading}
+      isLoading={isStreaming}
       onSubmit={handleSubmit}
       className="w-full max-w-[38rem] !rounded-lg bg-[#1e1f1e] !p-1 shadow-[0_0_0_0.5px_#343434] border border-[#2a2e2c]"
     >
@@ -63,16 +106,16 @@ export function ChatInput() {
             <Paperclip className="[transform:rotateZ(45deg)_rotateY(180deg)]" />
           </Button>
 
-          {/* <Button
-              variant="default"
-              size="icon"
-              aria-label="Send message"
-              className="h-8 w-8 rounded-full cursor-pointer hover:bg-[#252725] p-1 text-white opacity-80 bg-[#252725] [&_svg]:size-7"
-              onClick={handleSubmit}
-              disabled={!input}
-            >
-              {isLoading ? <Square /> : <Mic />}
-            </Button> */}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Send message"
+            className="h-8 w-8 rounded-md p-1 font-semibold hover:bg-black/10 opacity-65 [&_svg]:size-6.5"
+            onClick={handleSubmit}
+            disabled={!input.trim() || isStreaming}
+          >
+            <Send />
+          </Button>
         </div>
       </PromptInputActions>
     </PromptInput>

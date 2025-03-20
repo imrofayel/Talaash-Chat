@@ -64,9 +64,11 @@ const MemoizedMarkdownBlock = memo(
     className?: string;
   }) {
     return (
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components} className={className}>
-        {content}
-      </ReactMarkdown>
+      <div className={className}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+          {content}
+        </ReactMarkdown>
+      </div>
     );
   },
   function propsAreEqual(prevProps, nextProps) {
