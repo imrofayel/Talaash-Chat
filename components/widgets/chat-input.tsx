@@ -47,7 +47,12 @@ export function ChatInput() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input, model }),
+        body: JSON.stringify({
+          message: input,
+          mode,
+          model,
+          messages: useChatStore.getState().messages,
+        }),
         signal: abortController.current.signal,
       });
 

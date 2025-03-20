@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { message, model = "deepseek/deepseek_v3" } = await req.json();
+    const { message, model = "deepseek/deepseek_v3", messages = [] } = await req.json();
 
     const response = await openai.chat.completions.create({
       messages: [
@@ -11,6 +11,7 @@ export async function POST(req: Request) {
           role: "system",
           content: "Be a helpful assistant.",
         },
+        ...messages,
         {
           role: "user",
           content: message,
