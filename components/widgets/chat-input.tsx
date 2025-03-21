@@ -135,13 +135,13 @@ export function ChatInput() {
   const isModelSelectionEnabled = mode === "chat";
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full absolute bottom-4 flex justify-center items-center">
       <PromptInput
         value={input}
         onValueChange={handleValueChange}
         isLoading={isStreaming}
         onSubmit={handleSubmit}
-        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100/30 !p-1 drop-shadow-xs border !border-gray-200/60"
+        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100/30 backdrop-blur-3xl !p-1 drop-shadow-xs border !border-gray-200/60"
       >
         <PromptInputTextarea
           placeholder="Ask Anything"

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
@@ -5,6 +7,12 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
+
+.roboto-mono {
+  font-family: "Roboto Mono", monospace !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -29,7 +37,7 @@ body {
   background-clip: content-box; /* Ensures the thumb stays within bounds */
 }
 
-* {
+body {
   box-sizing: border-box;
   font-family: "Geist";
   /* @apply !text-gray-950 */

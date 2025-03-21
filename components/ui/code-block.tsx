@@ -48,7 +48,10 @@ function CodeBlockCode({
     highlight();
   }, [code, language, theme]);
 
-  const classNames = cn("w-full overflow-x-auto text-[13px] [&>pre]:px-4 [&>pre]:py-4", className);
+  const classNames = cn(
+    "w-full overflow-x-auto text-[16px] roboto-mono [&>pre]:px-4 [&>pre]:py-3",
+    className
+  );
 
   // SSR fallback: render plain code if not hydrated yet
   return highlightedHtml ? (
