@@ -13,7 +13,6 @@ interface MarkdownProps {
 
 type ComponentType = "p" | "code";
 type MarkdownComponentProps<T extends ComponentType> = ComponentProps<T> & {
-  // node?: any;
   inline?: boolean;
   children?: ReactNode;
 };
@@ -43,10 +42,7 @@ export function Markdown({ children, className, highlighter }: MarkdownProps) {
             // Handle inline code blocks
             if (inline) {
               return (
-                <code
-                  {...props}
-                  className="inline-code !inline bg-secondary/50 px-1 py-0.5 rounded"
-                >
+                <code {...props} className="inline-code !inline bg-gray-100 px-1 py-0.5 rounded">
                   {children}
                 </code>
               );
@@ -63,7 +59,7 @@ export function Markdown({ children, className, highlighter }: MarkdownProps) {
                   dangerouslySetInnerHTML={{
                     __html: highlighter.codeToHtml(content, {
                       lang: lang || "text",
-                      theme: "github-dark",
+                      theme: "github-light",
                     }),
                   }}
                 />
@@ -72,7 +68,7 @@ export function Markdown({ children, className, highlighter }: MarkdownProps) {
 
             // Fallback for block code without syntax highlighting
             return (
-              <pre className="rounded-md bg-muted/50 p-4 overflow-x-auto">
+              <pre className="rounded-md !bg-white p-4 overflow-x-auto">
                 <code className={className} {...props}>
                   {children}
                 </code>

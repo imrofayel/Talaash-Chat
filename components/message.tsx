@@ -27,10 +27,10 @@ export function Message({ message, highlighter }: MessageProps) {
     <Button
       variant="ghost"
       size="icon"
-      className="h-6 w-6 absolute top-2 right-2"
+      className="h-6 w-6 opacity-50 absolute top-2 right-2"
       onClick={() => handleCopy(text)}
     >
-      {copied ? <CheckIcon className="h-3 w-3" /> : <CopyIcon className="h-3 w-3" />}
+      {copied ? <CheckIcon className="!h-5.5" /> : <CopyIcon className="!h-4.5" />}
     </Button>
   );
 
@@ -40,9 +40,8 @@ export function Message({ message, highlighter }: MessageProps) {
 
   if (message.role === "user") {
     return (
-      <div className="mb-6 flex flex-col items-end">
-        <div className="rounded-lg px-4 py-2 bg-primary/90 text-primary-foreground relative">
-          <CopyButton text={message.content} />
+      <div className="mb-6 flex flex-col items-end text-[17px]">
+        <div className="rounded-xl px-4 py-2 bg-gray-100 relative">
           <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
             <Markdown highlighter={highlighter}>{message.content}</Markdown>
           </div>
@@ -55,8 +54,8 @@ export function Message({ message, highlighter }: MessageProps) {
     <div className="mb-6 flex flex-col items-start">
       {message.thinking ? (
         // Streaming/Thinking state
-        <div className="flex flex-col gap-2">
-          <div className="rounded-lg px-4 py-2 bg-muted/50 border border-muted">
+        <div className="flex !min-h-[100px] flex-col gap-2">
+          <div className="rounded-lg px-4 py-2 bg-white border border-muted">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
               <Sparkles className="h-3 w-3" />
               <span>Thinking...</span>
@@ -69,7 +68,7 @@ export function Message({ message, highlighter }: MessageProps) {
       ) : (
         // Completed response state
         <div className="flex flex-col gap-2 w-full">
-          <div className="rounded-lg px-4 py-2 bg-secondary/80 backdrop-blur-sm relative">
+          <div className="rounded-lg px-4 py-2 bg-white drop-shadow-xs border border-gray-100 backdrop-blur-sm relative">
             <CopyButton text={showThinking ? thinking || "" : response} />
             <div className="[&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
               <Markdown highlighter={highlighter}>

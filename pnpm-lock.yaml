@@ -79,6 +79,9 @@ importers:
       shiki-stream:
         specifier: ^0.1.1
         version: 0.1.1(react@19.0.0)
+      shiki-themes:
+        specifier: ^0.2.7
+        version: 0.2.7
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.0.2
@@ -2830,6 +2833,14 @@ packages:
       }
     hasBin: true
 
+  json5@2.2.3:
+    resolution:
+      {
+        integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==,
+      }
+    engines: { node: ">=6" }
+    hasBin: true
+
   jsx-ast-utils@3.3.5:
     resolution:
       {
@@ -3972,6 +3983,12 @@ packages:
       vue:
         optional: true
 
+  shiki-themes@0.2.7:
+    resolution:
+      {
+        integrity: sha512-ZMmboDYw5+SEpugM8KGUq3tkZ0vXg+k60XX6NngDK7gc1Sv6YLUlanpvG3evm57uKJvfXsky/S5MzSOTtYKLjA==,
+      }
+
   shiki@3.1.0:
     resolution:
       {
@@ -4404,6 +4421,12 @@ packages:
     resolution:
       {
         integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==,
+      }
+
+  vscode-textmate@5.5.0:
+    resolution:
+      {
+        integrity: sha512-jToQkPGMNKn0eyKyitYeINJF0NoD240aYyKPIWJv5W2jfPt++jIRg0OSergubtGhbw6SoefkvBYEpX7TsfoSUQ==,
       }
 
   web-streams-polyfill@4.0.0-beta.3:
@@ -6306,6 +6329,8 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
+  json5@2.2.3: {}
+
   jsx-ast-utils@3.3.5:
     dependencies:
       array-includes: 3.1.8
@@ -7228,6 +7253,11 @@ snapshots:
     optionalDependencies:
       react: 19.0.0
 
+  shiki-themes@0.2.7:
+    dependencies:
+      json5: 2.2.3
+      vscode-textmate: 5.5.0
+
   shiki@3.1.0:
     dependencies:
       "@shikijs/core": 3.1.0
@@ -7529,6 +7559,8 @@ snapshots:
     dependencies:
       "@types/unist": 3.0.3
       vfile-message: 4.0.2
+
+  vscode-textmate@5.5.0: {}
 
   web-streams-polyfill@4.0.0-beta.3: {}
 
