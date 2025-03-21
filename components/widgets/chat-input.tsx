@@ -141,7 +141,7 @@ export function ChatInput() {
         onValueChange={handleValueChange}
         isLoading={isStreaming}
         onSubmit={handleSubmit}
-        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100/30 backdrop-blur-3xl !p-1 drop-shadow-xs border !border-gray-200/60"
+        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100 !p-1 drop-shadow-xs border !border-gray-200/60"
       >
         <PromptInputTextarea
           placeholder="Ask Anything"
