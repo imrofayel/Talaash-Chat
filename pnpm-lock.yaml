@@ -43,6 +43,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      exa-js:
+        specifier: ^1.5.12
+        version: 1.5.12
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
@@ -1732,6 +1735,12 @@ packages:
         integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==,
       }
 
+  cross-fetch@4.1.0:
+    resolution:
+      {
+        integrity: sha512-uKm5PU+MHTootlWEY+mZ4vvXoCn4fLQxT9dSc1sXVMSFkINTJVN8cAQROpwcKm8bJ/c7rgZVIBWzH5T78sNZZw==,
+      }
+
   cross-spawn@7.0.6:
     resolution:
       {
@@ -1876,6 +1885,13 @@ packages:
         integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==,
       }
     engines: { node: ">=0.10.0" }
+
+  dotenv@16.4.7:
+    resolution:
+      {
+        integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==,
+      }
+    engines: { node: ">=12" }
 
   dunder-proto@1.0.1:
     resolution:
@@ -2170,6 +2186,12 @@ packages:
     resolution:
       {
         integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==,
+      }
+
+  exa-js@1.5.12:
+    resolution:
+      {
+        integrity: sha512-Dvq+ab48ZJeuvoei9XcsbJQuwmAz2h1kCVyK9A9KlvbQNCmfAM2Gp/0m3rzRjnU/wSSEbkI0DBAXD2QkrgLbtg==,
       }
 
   execa@8.0.1:
@@ -5578,6 +5600,12 @@ snapshots:
 
   concat-map@0.0.1: {}
 
+  cross-fetch@4.1.0:
+    dependencies:
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
+
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -5652,6 +5680,8 @@ snapshots:
   doctrine@2.1.0:
     dependencies:
       esutils: 2.0.3
+
+  dotenv@16.4.7: {}
 
   dunder-proto@1.0.1:
     dependencies:
@@ -5975,6 +6005,13 @@ snapshots:
   event-target-shim@5.0.1: {}
 
   eventemitter3@5.0.1: {}
+
+  exa-js@1.5.12:
+    dependencies:
+      cross-fetch: 4.1.0
+      dotenv: 16.4.7
+    transitivePeerDependencies:
+      - encoding
 
   execa@8.0.1:
     dependencies:

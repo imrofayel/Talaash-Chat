@@ -9,4 +9,9 @@ export type ChatMessage = {
   id: string;
   content: string;
   role: "assistant" | "user" | "system";
+  sources?: Array<{
+    title: string;
+    url: string;
+    summary?: string;
+  }>;
 };

@@ -2,7 +2,7 @@
 
 import { PromptInput, PromptInputActions, PromptInputTextarea } from "@/components/ui/prompt-input";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, ChevronDown, Square, Brain, ArrowUpRight } from "lucide-react";
+import { MessageCircle, ChevronDown, Square, Brain, ArrowUpRight, Search } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "@/store/chat";
 import {
@@ -25,6 +25,8 @@ export function ChatInput() {
     model,
     setModel,
   } = useChatStore();
+
+  // type ChatMode = "chat" | "research" | "search";
   const abortController = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -178,6 +180,21 @@ export function ChatInput() {
             >
               <Brain />
               Deepthink
+            </Button>
+
+            <Button
+              variant="ghost"
+              aria-label="Search"
+              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
+                mode === "search" && " bg-black/3 drop-shadow-none hover:bg-black/3"
+              }`}
+              onClick={() => {
+                setMode("search");
+                setModel("deepseek/deepseek_v3");
+              }}
+            >
+              <Search />
+              Search
             </Button>
 
             <DropdownMenu>

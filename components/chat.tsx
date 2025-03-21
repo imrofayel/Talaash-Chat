@@ -12,7 +12,9 @@ export function Chat() {
     <ChatContainer className="flex-1 px-4 pb-[120px]">
       {messages.map((message) => (
         <Message key={message.id} className={cn(message.role === "user" && "self-end")}>
-          <MessageContent markdown>{message.content}</MessageContent>
+          <MessageContent markdown message={message}>
+            {message.content}
+          </MessageContent>
         </Message>
       ))}
     </ChatContainer>

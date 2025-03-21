@@ -2,13 +2,19 @@ import { create } from "zustand";
 import { ChatMessage } from "@/lib/openai";
 import { nanoid } from "nanoid";
 
-type ChatMode = "chat" | "research";
+type ChatMode = "chat" | "research" | "search";
 type ModelType = string;
+
+type Source = {
+  title: string;
+  url: string;
+  summary?: string;
+};
 
 type ChatStore = {
   messages: ChatMessage[];
-  addMessage: (content: string, role: ChatMessage["role"]) => void;
-  updateLastMessage: (content: string) => void;
+  addMessage: (content: string, role: ChatMessage["role"], sources?: Source[]) => void;
+  updateLastMessage: (content: string, sources?: Source[]) => void;
   isStreaming: boolean;
   setIsStreaming: (streaming: boolean) => void;
   mode: ChatMode;
@@ -19,14 +25,20 @@ type ChatStore = {
 
 export const useChatStore = create<ChatStore>((set) => ({
   messages: [],
-  addMessage: (content, role) =>
+  addMessage: (content, role, sources) =>
     set((state) => ({
-      messages: [...state.messages, { id: nanoid(), content, role }],
+      messages: [...state.messages, { id: nanoid(), content, role, sources }],
     })),
-  updateLastMessage: (content) =>
+  updateLastMessage: (content, sources) =>
     set((state) => ({
       messages: state.messages.map((msg, i) =>
-        i === state.messages.length - 1 ? { ...msg, content: msg.content + content } : msg
+        i === state.messages.length - 1
+          ? {
+              ...msg,
+              content: msg.content + content,
+              sources: sources || msg.sources,
+            }
+          : msg
       ),
     })),
   isStreaming: false,
