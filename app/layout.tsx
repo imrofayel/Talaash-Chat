@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { initHighlighter } from "@/lib/shiki";
+
+// Initialize highlighter only on client side
+if (typeof window !== "undefined") {
+  initHighlighter();
+}
 
 export const metadata: Metadata = {
   title: "Create Next App",

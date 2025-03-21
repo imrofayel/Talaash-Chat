@@ -1,84 +1,103 @@
-"use client";
-
-import React, { ComponentProps, ReactNode } from "react";
-import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
-import { Highlighter } from "shiki";
+import { marked } from "marked";
+import { memo, useId, useMemo } from "react";
+import ReactMarkdown, { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { CodeBlock, CodeBlockCode } from "./code-block";
 
-interface MarkdownProps {
+export type MarkdownProps = {
   children: string;
+  id?: string;
   className?: string;
-  highlighter: Highlighter | null;
-}
-
-type ComponentType = "p" | "code";
-type MarkdownComponentProps<T extends ComponentType> = ComponentProps<T> & {
-  inline?: boolean;
-  children?: ReactNode;
+  components?: Partial<Components>;
 };
 
-export function Markdown({ children, className, highlighter }: MarkdownProps) {
-  return (
-    <div
-      className={cn(
-        "prose prose-invert",
-        "prose-headings:text-primary-foreground prose-headings:font-semibold",
-        "prose-p:text-secondary-foreground/90 prose-p:leading-relaxed",
-        "prose-strong:text-primary-foreground prose-strong:font-semibold",
-        "prose-code:text-primary-foreground prose-code:bg-secondary/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded",
-        "prose-pre:bg-secondary/30 prose-pre:border prose-pre:border-secondary",
-        "prose-a:text-blue-400 hover:prose-a:text-blue-300",
-        "prose-ul:text-secondary-foreground/90 prose-li:text-secondary-foreground/90",
-        "[&_p_code]:inline [&_p_code]:bg-secondary/50 [&_p_code]:rounded",
-        className
-      )}
-    >
-      <ReactMarkdown
-        components={{
-          p: ({ children, ...props }: MarkdownComponentProps<"p">) => <p {...props}>{children}</p>,
-          code: ({ inline, className, children, ...props }: MarkdownComponentProps<"code">) => {
-            if (!children) return null;
+function parseMarkdownIntoBlocks(markdown: string): string[] {
+  const tokens = marked.lexer(markdown);
+  return tokens.map((token) => token.raw);
+}
 
-            // Handle inline code blocks
-            if (inline) {
-              return (
-                <code {...props} className="inline-code !inline bg-gray-100 px-1 py-0.5 rounded">
-                  {children}
-                </code>
-              );
-            }
+function extractLanguage(className?: string): string {
+  if (!className) return "plaintext";
+  const match = className.match(/language-(\w+)/);
+  return match ? match[1] : "plaintext";
+}
 
-            // Handle block code with syntax highlighting
-            const match = /language-(\w+)/.exec(className || "");
-            const lang = match ? match[1] : "text";
-            const content = String(children).replace(/\n$/, "");
+const INITIAL_COMPONENTS: Partial<Components> = {
+  code: function CodeComponent({ className, children, ...props }) {
+    const isInline =
+      !props.node?.position?.start.line ||
+      props.node?.position?.start.line === props.node?.position?.end.line;
 
-            if (highlighter) {
-              return (
-                <code
-                  dangerouslySetInnerHTML={{
-                    __html: highlighter.codeToHtml(content, {
-                      lang: lang || "text",
-                      theme: "github-light",
-                    }),
-                  }}
-                />
-              );
-            }
+    if (isInline) {
+      return (
+        <span
+          className={cn("bg-primary-foreground rounded-sm px-1 font-mono text-sm", className)}
+          {...props}
+        >
+          {children}
+        </span>
+      );
+    }
 
-            // Fallback for block code without syntax highlighting
-            return (
-              <pre className="rounded-md !bg-white p-4 overflow-x-auto">
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              </pre>
-            );
-          },
-        }}
-      >
-        {children}
+    const language = extractLanguage(className);
+
+    return (
+      <CodeBlock className={className}>
+        <CodeBlockCode code={children as string} language={language} />
+      </CodeBlock>
+    );
+  },
+  pre: function PreComponent({ children }) {
+    return <>{children}</>;
+  },
+};
+
+const MemoizedMarkdownBlock = memo(
+  function MarkdownBlock({
+    content,
+    components = INITIAL_COMPONENTS,
+  }: {
+    content: string;
+    components?: Partial<Components>;
+  }) {
+    return (
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+        {content}
       </ReactMarkdown>
+    );
+  },
+  function propsAreEqual(prevProps, nextProps) {
+    return prevProps.content === nextProps.content;
+  }
+);
+
+MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
+
+function MarkdownComponent({
+  children,
+  id,
+  className,
+  components = INITIAL_COMPONENTS,
+}: MarkdownProps) {
+  const generatedId = useId();
+  const blockId = id ?? generatedId;
+  const blocks = useMemo(() => parseMarkdownIntoBlocks(children), [children]);
+
+  return (
+    <div className={className}>
+      {blocks.map((block, index) => (
+        <MemoizedMarkdownBlock
+          key={`${blockId}-block-${index}`}
+          content={block}
+          components={components}
+        />
+      ))}
     </div>
   );
 }
+
+const Markdown = memo(MarkdownComponent);
+Markdown.displayName = "Markdown";
+
+export { Markdown };
