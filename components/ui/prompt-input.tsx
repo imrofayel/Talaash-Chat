@@ -68,7 +68,7 @@ function PromptInput({
           onSubmit,
         }}
       >
-        <div className={cn("bg-background rounded-3xl p-2 shadow-xs", className)}>{children}</div>
+        <div className={cn("bg-background rounded-4xl p-2 shadow-xs", className)}>{children}</div>
       </PromptInputContext.Provider>
     </TooltipProvider>
   );
@@ -113,7 +113,7 @@ function PromptInputTextarea({
       onChange={(e) => setValue(e.target.value)}
       onKeyDown={handleKeyDown}
       className={cn(
-        "text-primary/80 min-h-[44px] max-h-[80px] w-full resize-none border-none bg-transparent shadow-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 scrollbar-hidden",
+        "text-primary/80 min-h-[44px] max-h-[80px] w-full resize-none  bg-transparent shadow-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 scrollbar-hidden",
         className
       )}
       rows={1}

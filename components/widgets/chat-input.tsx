@@ -2,7 +2,7 @@
 
 import { PromptInput, PromptInputActions, PromptInputTextarea } from "@/components/ui/prompt-input";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Paperclip, Atom, Send, ChevronDown, Square } from "lucide-react";
+import { MessageCircle, ChevronDown, Square, Brain, ArrowUpRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "@/store/chat";
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export function ChatInput() {
   const [input, setInput] = useState<string>("");
@@ -134,103 +135,98 @@ export function ChatInput() {
   const isModelSelectionEnabled = mode === "chat";
 
   return (
-    <PromptInput
-      value={input}
-      onValueChange={handleValueChange}
-      isLoading={isStreaming}
-      onSubmit={handleSubmit}
-      className="w-full max-w-[38rem] !rounded-lg bg-[#1e1f1e] !p-1 shadow-[0_0_0_0.5px_#343434] border border-[#2a2e2c]"
-    >
-      <PromptInputTextarea
-        placeholder="Ask Anything"
-        className="text-[16px] bg-[#2f313070] placeholder:text-[16px] md:text-[16px] placeholder:opacity-80 !mb-3 !rounded-md drop-shadow-xs !px-3.5 !py-2.5"
-        rows={2}
-      />
-      <PromptInputActions className="flex h-[32px] items-center justify-between gap-2 !px-0.5 !mb-0.5">
-        <div className="flex flex-wrap items-center gap-x-0.5">
-          <Button
-            variant="ghost"
-            aria-label="Chat"
-            className={`h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-1.5 text-sm font-normal [&_svg]:size-5.5 cursor-pointer hover:bg-black/10 rounded-md ${
-              mode === "chat" ? "opacity-100 bg-black/10" : "opacity-65"
-            }`}
-            onClick={() => {
-              setMode("chat");
-              setModel("deepseek/deepseek_v3");
-            }}
-          >
-            <MessageCircle />
-            Chat
-          </Button>
-
-          <Button
-            variant="ghost"
-            aria-label="Research"
-            className={`h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-2 text-sm font-normal [&_svg]:size-5.5 cursor-pointer hover:bg-black/10 rounded-md ${
-              mode === "research" ? "opacity-100 bg-black/10" : "opacity-65"
-            }`}
-            onClick={() => {
-              setMode("research");
-              setModel("deepseek/deepseek-r1");
-            }}
-          >
-            <Atom />
-            Research
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
-              <Button
-                variant="ghost"
-                aria-label="Select Model"
-                disabled={!isModelSelectionEnabled}
-                className={`h-7 w-auto gap-1 bg-[#1e1f1e] p-1 !px-2 text-sm font-normal [&_svg]:size-5.5 cursor-pointer hover:bg-black/10 rounded-md ${
-                  isModelSelectionEnabled ? "opacity-65" : "opacity-30"
-                }`}
-              >
-                {model.split("/").pop()}
-                <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="start"
-              className="w-[250px] overflow-auto"
-              style={{ maxHeight: "200px" }}
+    <div className="w-full flex justify-center items-center">
+      <PromptInput
+        value={input}
+        onValueChange={handleValueChange}
+        isLoading={isStreaming}
+        onSubmit={handleSubmit}
+        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100/30 !p-1 drop-shadow-xs border !border-gray-200/60"
+      >
+        <PromptInputTextarea
+          placeholder="Ask Anything"
+          className="text-[16px] bg-white  placeholder:text-[16px] md:text-[16px] placeholder:text-gray-950 !mb-3 !rounded-lg drop-shadow-xs !px-3.5 !py-2.5 text-gray-950 outline-none ring-0 border-gray-100"
+          rows={2}
+        />
+        <PromptInputActions className="flex h-[32px] items-center justify-between gap-2 !px-1 !mb-0.5">
+          <div className="flex flex-wrap items-center gap-x-1.5">
+            <Button
+              variant="ghost"
+              aria-label="Chat"
+              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
+                mode === "chat" && " bg-black/3 drop-shadow-none hover:bg-black/3"
+              }`}
+              onClick={() => {
+                setMode("chat");
+                setModel("deepseek/deepseek_v3");
+              }}
             >
-              {modelOptions.map((modelOption) => (
-                <DropdownMenuItem
-                  key={modelOption}
-                  onClick={() => setModel(modelOption)}
-                  disabled={!isModelSelectionEnabled}
-                >
-                  {modelOption}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="flex items-center gap-x-2.5">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Attach files"
-            className="h-8 w-8 rounded-md p-1 font-semibold hover:bg-black/10 focus-visible:outline-black dark:focus-visible:outline-white opacity-65 [&_svg]:size-6.5"
-          >
-            <Paperclip className="[transform:rotateZ(45deg)_rotateY(180deg)]" />
-          </Button>
+              <MessageCircle color="#030712" />
+              Chat
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={isStreaming ? "Stop response" : "Send message"}
-            className="h-8 w-8 rounded-md p-1 font-semibold hover:bg-black/10 opacity-65 [&_svg]:size-6.5"
-            onClick={isStreaming ? handleStop : handleSubmit}
-            disabled={!isStreaming && !input.trim()}
-          >
-            {isStreaming ? <Square /> : <Send />}
-          </Button>
-        </div>
-      </PromptInputActions>
-    </PromptInput>
+            <Button
+              variant="ghost"
+              aria-label="Research"
+              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
+                mode === "research" && " bg-black/3 drop-shadow-none hover:bg-black/3"
+              }`}
+              onClick={() => {
+                setMode("research");
+                setModel("deepseek/deepseek-r1");
+              }}
+            >
+              <Brain />
+              Deepthink
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
+                <Button
+                  variant="ghost"
+                  aria-label="Select Model"
+                  disabled={!isModelSelectionEnabled}
+                  className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
+                    isModelSelectionEnabled ? "opacity-100" : "opacity-30"
+                  }`}
+                >
+                  {model.split("/").pop()}
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-[250px] rounded-xl overflow-auto bg-white border-gray-200 !drop-shadow-xs shadow-none"
+                style={{ maxHeight: "200px" }}
+              >
+                {modelOptions.map((modelOption) => (
+                  <DropdownMenuItem
+                    key={modelOption}
+                    onClick={() => setModel(modelOption)}
+                    disabled={!isModelSelectionEnabled}
+                  >
+                    {modelOption}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="flex items-center gap-x-2.5">
+            <Button
+              size="icon"
+              aria-label={isStreaming ? "Stop response" : "Send message"}
+              className={cn(
+                "h-8 w-8 rounded-md p-1 font-semibold !text-gray-950 hover:bg-white bg-white",
+                isStreaming ? "[&_svg]:!size-4.5" : "[&_svg]:!size-5"
+              )}
+              onClick={isStreaming ? handleStop : handleSubmit}
+              disabled={!isStreaming && !input.trim()}
+            >
+              {isStreaming ? <Square className="[&_svg]:!size-4" /> : <ArrowUpRight />}
+            </Button>
+          </div>
+        </PromptInputActions>
+      </PromptInput>
+    </div>
   );
 }
