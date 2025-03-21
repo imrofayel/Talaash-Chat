@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import React from "react";
-import { highlightCode } from "@/lib/shiki";
+import React, { useEffect, useState } from "react";
+import { codeToHtml } from "shiki";
 
 export type CodeBlockProps = {
   children?: React.ReactNode;
@@ -32,17 +32,34 @@ export type CodeBlockCodeProps = {
 } & React.HTMLProps<HTMLDivElement>;
 
 function CodeBlockCode({
-  code = "", // provide default empty string
+  code,
   language = "tsx",
   theme = "github-light",
   className,
   ...props
 }: CodeBlockCodeProps) {
+  const [highlightedHtml, setHighlightedHtml] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function highlight() {
+      const html = await codeToHtml(code, { lang: language, theme });
+      setHighlightedHtml(html);
+    }
+    highlight();
+  }, [code, language, theme]);
+
   const classNames = cn("w-full overflow-x-auto text-[13px] [&>pre]:px-4 [&>pre]:py-4", className);
 
-  const html = highlightCode(code, language, theme);
-
-  return <div className={classNames} dangerouslySetInnerHTML={{ __html: html }} {...props} />;
+  // SSR fallback: render plain code if not hydrated yet
+  return highlightedHtml ? (
+    <div className={classNames} dangerouslySetInnerHTML={{ __html: highlightedHtml }} {...props} />
+  ) : (
+    <div className={classNames} {...props}>
+      <pre>
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
 }
 
 export type CodeBlockGroupProps = React.HTMLAttributes<HTMLDivElement>;
