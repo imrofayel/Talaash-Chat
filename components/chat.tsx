@@ -9,10 +9,14 @@ export function Chat() {
   const { messages } = useChatStore();
 
   return (
-    <ChatContainer className="flex-1 px-4 pb-[120px]">
+    <ChatContainer className="flex gap-3 px-4 pb-[120px]">
       {messages.map((message) => (
         <Message key={message.id} className={cn(message.role === "user" && "self-end")}>
-          <MessageContent markdown message={message}>
+          <MessageContent
+            markdown
+            message={message}
+            className={cn(message.role == "user" && "!bg-gray-100")}
+          >
             {message.content}
           </MessageContent>
         </Message>

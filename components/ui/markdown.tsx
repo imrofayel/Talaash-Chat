@@ -32,7 +32,10 @@ const INITIAL_COMPONENTS: Partial<Components> = {
     if (isInline) {
       return (
         <span
-          className={cn("bg-primary-foreground rounded-sm px-1 font-mono text-sm", className)}
+          className={cn(
+            "bg-primary-foreground p-1 rounded-sm px-1 font-mono !text-base",
+            className
+          )}
           {...props}
         >
           {children}
@@ -43,7 +46,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
     const language = extractLanguage(className);
 
     return (
-      <CodeBlock className={className}>
+      <CodeBlock className={cn(className)}>
         <CodeBlockCode code={children as string} language={language} />
       </CodeBlock>
     );

@@ -91,14 +91,31 @@ export async function POST(req: Request) {
       // presence_penalty: 1,
     });
 
-    let fullText = "";
-    for await (const part of response) {
-      if (part.choices?.[0]?.delta?.content) {
-        fullText += part.choices[0].delta.content;
-      }
-    }
+    // Create a streaming response
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const part of response) {
+            if (part.choices?.[0]?.delta?.content) {
+              const chunk = part.choices[0].delta.content;
+              controller.enqueue(encoder.encode(chunk));
+            }
+          }
 
-    return NextResponse.json({ content: fullText, sources: sources || [] });
+          // Send sources at the end
+          if (sources && sources.length > 0) {
+            controller.enqueue(encoder.encode(JSON.stringify({ sources })));
+          }
+
+          controller.close();
+        } catch (error) {
+          controller.error(error);
+        }
+      },
+    });
+
+    return new Response(stream);
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json({ error: "Request failed" }, { status: 500 });

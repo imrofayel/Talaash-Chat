@@ -14,7 +14,7 @@ export type MessageProps = {
 } & React.HTMLProps<HTMLDivElement>;
 
 const Message = ({ children, className, ...props }: MessageProps) => (
-  <div className={cn("flex gap-3", className)} {...props}>
+  <div className={cn("", className)} {...props}>
     {children}
   </div>
 );
@@ -65,7 +65,7 @@ const MessageContent = ({
     : [];
 
   const classNames = cn(
-    "rounded-lg p-2 text-foreground bg-secondary prose break-words whitespace-normal",
+    "rounded-xl px-3 py-2 text-[17px] !bg-white  break-words leading-loose",
     className
   );
 
