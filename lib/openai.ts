@@ -13,5 +13,7 @@ export type ChatMessage = {
     title: string;
     url: string;
     summary?: string;
+    icon?: string;
+    author?: string;
   }>;
 };

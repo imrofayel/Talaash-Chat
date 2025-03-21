@@ -61,16 +61,23 @@ export function ChatInput() {
 
       if (!response.ok) throw new Error("Failed to send message");
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
+      // const reader = response.body?.getReader();
+      // const decoder = new TextDecoder();
 
-      while (true) {
-        const { done, value } = await reader!.read();
-        if (done) break;
+      // while (true) {
+      //   const { done, value } = await reader!.read();
+      //   if (done) break;
 
-        const text = decoder.decode(value, { stream: true });
-        if (text) updateLastMessage(text);
-      }
+      //   const text = decoder.decode(value, { stream: true });
+      //   if (text) updateLastMessage(text);
+      // }
+
+      // Extract sources from the response (assuming the API returns sources)
+      const responseData = await response.json();
+      const content = responseData.content;
+      const sources = responseData.sources;
+
+      updateLastMessage(content, sources);
 
       setInput("");
     } catch (error: unknown) {

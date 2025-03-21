@@ -16,48 +16,57 @@ export async function POST(req: Request) {
 
     let systemPrompt = "Be a helpful assistant.";
     const userMessage = message;
-    // let sources = [];
+    interface Source {
+      title: string | null;
+      url: string;
+      summary: string;
+      icon?: string;
+      author?: string;
+    }
+    let sources: Source[] = []; // Define sources here
 
     // If in search mode, fetch search results and enhance the prompt
     if (mode === "search" && process.env.EXA_API_KEY) {
       try {
         const searchResults = await exa.searchAndContents(message, {
-          text: true,
           highlights: true,
           summary: true,
+          // livecrawl: "always",
+          // numResults: 5,
+          // type: "neural",
+          // useAutoprompt: true
         });
-
-        // Store sources for later use
-        // const sources = searchResults.results.slice(0, 5).map((result) => ({
-        //   title: result.title,
-        //   url: result.url,
-        //   summary: result.summary ? result.summary : ""
-        // }));
 
         // Format search results for the AI
         const formattedResults = searchResults.results
-          .slice(0, 5)
           .map((result, index) => {
             return `Source ${index + 1}: ${result.title}\nURL: ${result.url}\nSummary: ${result.summary ? result.summary : ""}\nHighlights: ${(result.highlights ? result.highlights : []).join("\n")}\n`;
           })
           .join("\n");
+
+        // Extract sources for the response
+        sources = searchResults.results.map((result) => ({
+          title: result.title,
+          url: result.url,
+          summary: result.summary ? result.summary : "",
+          icon: result.favicon,
+          author: result.author,
+        }));
 
         // Create enhanced system prompt with search context
         systemPrompt = `You are a helpful AI assistant with web search capabilities. 
         You have searched the web for: "${message}"
         
         Here are the search results:\n${formattedResults}\n\n
-        Based on these search results, provide a comprehensive and accurate response. 
-        Include relevant information from the search results and cite your sources using numbers in square brackets like [1], [2], etc.
+        Based on these search results, provide a comprehensive and accurate response in a causal normal way. and put the accurate information in your own words. dont add too much gaps between things, it should be smooth, concise and clear and in paragraphs format only dont add headings or stuff. 
+        Include relevant information from the search results. Dont mention sources in the paraphrased response. It should be in flow, professional way.
         If the search results don't contain enough information to answer the query, acknowledge this limitation.
-        Format your response in a clear, readable way with proper markdown formatting.
-        
-        IMPORTANT: You MUST cite your sources using numbers in square brackets [1], [2], etc. after each piece of information you include from the search results.`;
+        `;
       } catch (error) {
         console.error("Search API Error:", error);
         // If search fails, fall back to regular chat mode
         systemPrompt =
-          "Be a helpful assistant. You were asked to search the web, but the search failed. Please respond based on your knowledge.";
+          "Just say web search is failed. YOU DONT HAVE TO REPLY TO ANY QUERY USER ASKED JUSR SAY Server is busy, try later.";
       }
     }
 
@@ -75,45 +84,23 @@ export async function POST(req: Request) {
       ],
       model: model,
       stream: true,
-      //   max_tokens: 2048,
-      //   temperature: 1,
-      //   top_p: 1,
-      //   frequency_penalty: 0,
-      //   presence_penalty: 0,
-      //   min_p: 0,
-      //   top_k: 50,
-      //   repetition_penalty: 1,
+      max_tokens: 2048,
+      // temperature: 0.6,
+      // top_p: 1,
+      // frequency_penalty: 2,
+      // presence_penalty: 1,
     });
 
-    return new Response(
-      new ReadableStream({
-        async start(controller) {
-          try {
-            for await (const chunk of response) {
-              const content = chunk.choices[0].delta.content;
-              if (content) {
-                controller.enqueue(new TextEncoder().encode(content));
-              }
-              if (chunk.choices[0].finish_reason) {
-                break;
-              }
-            }
-          } catch (error) {
-            controller.error(error);
-          } finally {
-            controller.close();
-          }
-        },
-      }),
-      {
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "X-Content-Type-Options": "nosniff",
-        },
+    let fullText = "";
+    for await (const part of response) {
+      if (part.choices?.[0]?.delta?.content) {
+        fullText += part.choices[0].delta.content;
       }
-    );
+    }
+
+    return NextResponse.json({ content: fullText, sources: sources || [] });
   } catch (error) {
-    console.error("Chat API Error:", error);
+    console.error("API Error:", error);
     return NextResponse.json({ error: "Request failed" }, { status: 500 });
   }
 }

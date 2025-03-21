@@ -9,6 +9,7 @@ type Source = {
   title: string;
   url: string;
   summary?: string;
+  icon?: string;
 };
 
 type ChatStore = {
@@ -27,20 +28,30 @@ export const useChatStore = create<ChatStore>((set) => ({
   messages: [],
   addMessage: (content, role, sources) =>
     set((state) => ({
-      messages: [...state.messages, { id: nanoid(), content, role, sources }],
+      messages: [
+        ...state.messages,
+        {
+          id: nanoid(),
+          content,
+          role,
+          sources, // Add sources here
+        },
+      ],
     })),
   updateLastMessage: (content, sources) =>
-    set((state) => ({
-      messages: state.messages.map((msg, i) =>
-        i === state.messages.length - 1
-          ? {
-              ...msg,
-              content: msg.content + content,
-              sources: sources || msg.sources,
-            }
-          : msg
-      ),
-    })),
+    set((state) => {
+      const lastMessageIndex = state.messages.length - 1;
+      if (lastMessageIndex < 0) return state; // No messages yet
+
+      const updatedMessages = [...state.messages];
+      updatedMessages[lastMessageIndex] = {
+        ...updatedMessages[lastMessageIndex],
+        content: content,
+        sources: sources || [], // Update sources here
+      };
+
+      return { ...state, messages: updatedMessages };
+    }),
   isStreaming: false,
   setIsStreaming: (streaming) => set({ isStreaming: streaming }),
   mode: "chat", // Default mode is chat

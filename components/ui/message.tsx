@@ -5,7 +5,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { cn } from "@/lib/utils";
 import { Markdown } from "./markdown";
 import { useState } from "react";
-import { ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { ChatMessage } from "@/lib/openai";
 
 export type MessageProps = {
@@ -74,42 +74,41 @@ const MessageContent = ({
       {markdown ? <Markdown>{children as string}</Markdown> : children}
 
       {hasSources && (
-        <div className="mt-3 border-t border-gray-200 pt-2">
+        <div className="mt-3 border-gray-200 pt-2">
           <Collapsible open={sourcesExpanded} onOpenChange={setSourcesExpanded}>
             <CollapsibleTrigger asChild>
               <Button
                 variant="ghost"
-                size="sm"
-                className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 p-0"
+                className="flex items-center gap-1 text-md hover:bg-white bg-white [&>svg]:!size-4.5 p-0"
               >
-                {sourcesExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                 {citations.length > 0 ? `Sources (${citations.length})` : "Sources"}
+
+                {sourcesExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </Button>
             </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2">
-              <div className="space-y-2">
-                {sources?.map(
-                  (source: { title: string; url: string; summary?: string }, index: number) => (
-                    <div key={index} className="bg-gray-50 rounded-md p-2 text-sm">
-                      <div className="flex justify-between items-start">
-                        <div className="font-medium">
-                          [{index + 1}] {source.title}
-                        </div>
-                        <a
+            <CollapsibleContent className="mt-2 p-2">
+              <div className="space-y-3">
+                {sources?.map((source, index: number) => (
+                  <div key={index} className=" text-base">
+                    <div className="flex justify-between items-start">
+                      <a className="font-normal" href={source.url}>
+                        {/* <img src={source.icon}/> */}
+                        {index + 1}. {source.title}
+                      </a>
+                      {/* <a
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800"
                         >
                           <ExternalLink size={14} />
-                        </a>
-                      </div>
-                      {source.summary && (
-                        <div className="text-gray-600 mt-1 text-xs">{source.summary}</div>
-                      )}
+                        </a> */}
                     </div>
-                  )
-                )}
+                    {/* {source.summary && (
+                        <div className="text-gray-600 mt-1 text-xs">{source.summary}</div>
+                      )} */}
+                  </div>
+                ))}
               </div>
             </CollapsibleContent>
           </Collapsible>
