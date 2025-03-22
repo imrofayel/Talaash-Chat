@@ -115,44 +115,46 @@ export function ChatInput() {
   };
 
   const modelOptions = [
-    // KEEP THE COMMENTED OUT MODELS
-    // "deepseek/deepseek-r1-turbo",
-    // "deepseek/deepseek-v3-turbo",
-    "qwen/qwq-32b",
-    "meta-llama/llama-3.1-8b-instruct",
-    // "deepseek/deepseek-r1",
-    "deepseek/deepseek_v3",
-    "meta-llama/llama-3.1-70b-instruct",
-    "meta-llama/llama-3.3-70b-instruct",
-    "mistralai/mistral-nemo",
-    // "deepseek/deepseek-r1-distill-qwen-14b",
-    // "deepseek/deepseek-r1-distill-qwen-32b",
-    // "deepseek/deepseek-r1-distill-llama-70b",
-    "Sao10K/L3-8B-Stheno-v3.2",
-    "gryphe/mythomax-l2-13b",
-    // "deepseek/deepseek-r1-distill-llama-8b",
-    "qwen/qwen-2.5-72b-instruct",
-    "meta-llama/llama-3-8b-instruct",
-    "microsoft/wizardlm-2-8x22b",
-    "google/gemma-2-9b-it",
-    "mistralai/mistral-7b-instruct",
-    "meta-llama/llama-3-70b-instruct",
-    "openchat/openchat-7b",
-    "nousresearch/hermes-2-pro-llama-3-8b",
-    "sao10k/l3-70b-euryale-v2.1",
-    "cognitivecomputations/dolphin-mixtral-8x22b",
-    "jondurbin/airoboros-l2-70b",
-    "nousresearch/nous-hermes-llama2-13b",
-    "teknium/openhermes-2.5-mistral-7b",
-    "sophosympatheia/midnight-rose-70b",
-    "sao10k/l3-8b-lunaris",
-    "qwen/qwen-2-vl-72b-instruct",
-    "meta-llama/llama-3.2-1b-instruct",
-    "meta-llama/llama-3.2-11b-vision-instruct",
-    "meta-llama/llama-3.2-3b-instruct",
-    "meta-llama/llama-3.1-8b-instruct-bf16",
-    "sao10k/l31-70b-euryale-v2.2",
-    "qwen/qwen-2-7b-instruct",
+    "google/gemini-exp-1206:free",
+    "google/gemini-2.0-pro-exp-02-05:free",
+    "google/gemini-2.0-flash-thinking-exp:free",
+    "google/gemini-2.0-flash-exp:free",
+    "google/gemini-2.0-flash-lite-preview-02-05:free",
+    "google/gemini-flash-1.5-8b-exp",
+    "deepseek/deepseek-r1-zero:free",
+    "deepseek/deepseek-r1:free",
+    "google/gemma-3-4b-it:free",
+    "google/gemma-3-12b-it:free",
+    "qwen/qwq-32b:free",
+    "nousresearch/deephermes-3-llama-3-8b-preview:free",
+    "qwen/qwen2.5-vl-72b-instruct:free",
+    "deepseek/deepseek-chat:free",
+    "nvidia/llama-3.1-nemotron-70b-instruct:free",
+    "meta-llama/llama-3.2-1b-instruct:free",
+    "meta-llama/llama-3.2-11b-vision-instruct:free",
+    "meta-llama/llama-3.1-8b-instruct:free",
+    "mistralai/mistral-small-3.1-24b-instruct:free",
+    "deepseek/deepseek-r1-distill-llama-70b:free",
+    "mistralai/mistral-nemo:free",
+    "google/gemma-3-27b-it:free",
+    "deepseek/deepseek-r1-distill-qwen-14b:free",
+    "google/learnlm-1.5-pro-experimental:free",
+    "google/gemini-2.0-flash-thinking-exp-1219:free",
+    "open-r1/olympiccoder-7b:free",
+    "open-r1/olympiccoder-32b:free",
+    "rekaai/reka-flash-3:free",
+    "cognitivecomputations/dolphin3.0-r1-mistral-24b:free",
+    "cognitivecomputations/dolphin3.0-mistral-24b:free",
+    "mistralai/mistral-small-24b-instruct-2501:free",
+    "qwen/qwen-2.5-coder-32b-instruct:free",
+    "qwen/qwen-2.5-72b-instruct:free",
+    "google/gemma-3-1b-it:free",
+    "meta-llama/llama-3.2-3b-instruct:free",
+    "qwen/qwq-32b-preview:free",
+    "deepseek/deepseek-r1-distill-qwen-32b:free",
+    "moonshotai/moonlight-16b-a3b-instruct:free",
+    "qwen/qwen-2-7b-instruct:free",
+    "google/gemma-2-9b-it:free",
   ];
 
   const isModelSelectionEnabled = mode === "chat";
@@ -174,6 +176,7 @@ export function ChatInput() {
         <PromptInputActions className="flex h-[32px] items-center justify-between gap-2 !px-1 !mb-0.5">
           <div className="flex flex-wrap items-center gap-x-1.5">
             <Button
+              disabled
               variant="ghost"
               aria-label="Chat"
               className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
@@ -189,6 +192,7 @@ export function ChatInput() {
             </Button>
 
             <Button
+              disabled
               variant="ghost"
               aria-label="Research"
               className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
@@ -204,6 +208,7 @@ export function ChatInput() {
             </Button>
 
             <Button
+              disabled
               variant="ghost"
               aria-label="Search"
               className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
