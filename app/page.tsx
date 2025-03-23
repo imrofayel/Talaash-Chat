@@ -4,8 +4,9 @@ import { Chat } from "@/components/chat";
 
 export default function Home() {
   return (
-    <div className="h-screen w-[60%] relative mx-auto !pb-4 flex flex-col">
+    <div className="h-screen w-[60%] relative mx-auto items-center !pb-4 flex flex-col">
       {/* <AppSidebar /> */}
+      {/* <ChatHero/> */}
       <Chat />
       <ChatInput />
     </div>

@@ -14,7 +14,7 @@ function CodeBlock({ children, className, ...props }: CodeBlockProps) {
     <div
       className={cn(
         "not-prose flex w-full flex-col overflow-clip border",
-        "border-border bg-card text-card-foreground rounded-xl my-3",
+        "border-border !bg-white/50 text-card-foreground rounded-2xl my-3",
         className
       )}
       {...props}
@@ -49,7 +49,7 @@ function CodeBlockCode({
   }, [code, language, theme]);
 
   const classNames = cn(
-    "w-full overflow-x-auto text-[16px] roboto-mono [&>pre]:px-4 [&>pre]:py-3",
+    "w-full overflow-x-auto text-[16px] roboto-mono [&>pre]:px-4 [&>pre]:py-3 !bg-white !backdrop-blur-none !bg-opacity-50",
     className
   );
 

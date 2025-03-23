@@ -2,7 +2,7 @@
 
 import { PromptInput, PromptInputActions, PromptInputTextarea } from "@/components/ui/prompt-input";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, ChevronDown, Square, Brain, ArrowUpRight, Search } from "lucide-react";
+import { ChevronDown, Square, ArrowUp } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "@/store/chat";
 import {
@@ -21,12 +21,11 @@ export function ChatInput() {
     addMessage,
     updateLastMessage,
     mode,
-    setMode,
+    // setMode,
     model,
     setModel,
   } = useChatStore();
 
-  // type ChatMode = "chat" | "research" | "search";
   const abortController = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -64,7 +63,6 @@ export function ChatInput() {
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let accumulatedText = "";
-      let sources = [];
 
       try {
         while (true) {
@@ -76,17 +74,14 @@ export function ChatInput() {
           try {
             // Check if the chunk is a valid JSON (for sources)
             const jsonData = JSON.parse(chunk);
-            if (jsonData.sources) {
-              sources = jsonData.sources;
-            }
             if (jsonData.content) {
               accumulatedText = jsonData.content;
-              updateLastMessage(accumulatedText, sources);
+              updateLastMessage(accumulatedText);
             }
           } catch {
             // If not valid JSON, treat as text chunk
             accumulatedText += chunk;
-            updateLastMessage(accumulatedText, sources);
+            updateLastMessage(accumulatedText);
           }
         }
       } catch (error) {
@@ -155,121 +150,84 @@ export function ChatInput() {
     "moonshotai/moonlight-16b-a3b-instruct:free",
     "qwen/qwen-2-7b-instruct:free",
     "google/gemma-2-9b-it:free",
+    "mistralai/mistral-7b-instruct:free",
+    // "microsoft/phi-3-mini-128k-instruct:free",
+    // "microsoft/phi-3-medium-128k-instruct:free",
+    // "meta-llama/llama-3-8b-instruct:free",
+    // "openchat/openchat-7b:free",
+    // "meta-llama/llama-3.3-70b-instruct:free",
+    // "sophosympatheia/rogue-rose-103b-v0.2:free"
   ];
 
   const isModelSelectionEnabled = mode === "chat";
 
   return (
-    <div className="w-full absolute bottom-4 flex justify-center items-center">
+    <div className="w-[60%] absolute bottom-4 flex flex-col justify-center items-center">
       <PromptInput
         value={input}
         onValueChange={handleValueChange}
         isLoading={isStreaming}
         onSubmit={handleSubmit}
-        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100 !p-1 drop-shadow-xs border !border-gray-200/60"
+        className="relative flex h-full border cursor-text bg-white w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
       >
         <PromptInputTextarea
-          placeholder="Ask Anything"
-          className="text-[16px] bg-white  placeholder:text-[16px] md:text-[16px] placeholder:text-gray-950 !mb-3 !rounded-lg drop-shadow-xs !px-3.5 !py-2.5 text-gray-950 outline-none ring-0 border-gray-100"
+          placeholder="Talk with Raya!"
+          className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[22px]"
           rows={2}
         />
-        <PromptInputActions className="flex h-[32px] items-center justify-between gap-2 !px-1 !mb-0.5">
-          <div className="flex flex-wrap items-center gap-x-1.5">
-            <Button
-              disabled
-              variant="ghost"
-              aria-label="Chat"
-              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                mode === "chat" && " bg-black/3 drop-shadow-none hover:bg-black/3"
-              }`}
-              onClick={() => {
-                setMode("chat");
-                setModel("deepseek/deepseek_v3");
-              }}
-            >
-              <MessageCircle color="#030712" />
-              Chat
-            </Button>
 
-            <Button
-              disabled
-              variant="ghost"
-              aria-label="Research"
-              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                mode === "research" && " bg-black/3 drop-shadow-none hover:bg-black/3"
-              }`}
-              onClick={() => {
-                setMode("research");
-                setModel("deepseek/deepseek-r1");
-              }}
-            >
-              <Brain />
-              Deepthink
-            </Button>
+        <Button
+          size="icon"
+          aria-label={isStreaming ? "Stop response" : "Send message"}
+          className={cn(
+            "rounded-full transition-all duration-600  font-semibold !text-gray-950 disabled:opacity-100",
+            isStreaming ? "[&_svg]:!size-4.5 bg-[#faf3ea] hover:bg-[#faf3ea]" : "[&_svg]:!size-5",
 
-            <Button
-              disabled
-              variant="ghost"
-              aria-label="Search"
-              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                mode === "search" && " bg-black/3 drop-shadow-none hover:bg-black/3"
-              }`}
-              onClick={() => {
-                setMode("search");
-                setModel("deepseek/deepseek_v3");
-              }}
-            >
-              <Search />
-              Search
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
-                <Button
-                  variant="ghost"
-                  aria-label="Select Model"
-                  disabled={!isModelSelectionEnabled}
-                  className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                    isModelSelectionEnabled ? "opacity-100" : "opacity-30"
-                  }`}
-                >
-                  {model.split("/").pop()}
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-[250px] rounded-xl overflow-auto bg-white border-gray-200 !drop-shadow-xs shadow-none"
-                style={{ maxHeight: "200px" }}
-              >
-                {modelOptions.map((modelOption) => (
-                  <DropdownMenuItem
-                    key={modelOption}
-                    onClick={() => setModel(modelOption)}
-                    disabled={!isModelSelectionEnabled}
-                  >
-                    {modelOption}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="flex items-center gap-x-2.5">
-            <Button
-              size="icon"
-              aria-label={isStreaming ? "Stop response" : "Send message"}
-              className={cn(
-                "h-8 w-8 rounded-md p-1 font-semibold !text-gray-950 hover:bg-white bg-white",
-                isStreaming ? "[&_svg]:!size-4.5" : "[&_svg]:!size-5"
-              )}
-              onClick={isStreaming ? handleStop : handleSubmit}
-              disabled={!isStreaming && !input.trim()}
-            >
-              {isStreaming ? <Square className="[&_svg]:!size-4" /> : <ArrowUpRight />}
-            </Button>
-          </div>
-        </PromptInputActions>
+            input.trim() === ""
+              ? "bg-[#faf3ea] !text-black/80"
+              : "bg-[#038247] hover:bg-[#038247] !text-white"
+          )}
+          onClick={isStreaming ? handleStop : handleSubmit}
+          disabled={!isStreaming && !input.trim()}
+        >
+          {isStreaming ? <Square className="[&_svg]:!size-5" /> : <ArrowUp />}
+        </Button>
       </PromptInput>
+
+      <PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
+        <div className="flex items-start flex-wrap gap-x-1.5">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
+              <Button
+                variant="ghost"
+                aria-label="Select Model"
+                disabled={!isModelSelectionEnabled}
+                className={`h-8 w-auto gap-1 bg-white text-black/80 border p-1 !px-2 hover:bg-white  text-[16px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+                  isModelSelectionEnabled ? "opacity-100" : "opacity-30"
+                }`}
+              >
+                {model.split("/").pop()}
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              className="w-[255px] rounded-xl overflow-auto bg-white   shadow-none text-[15px] text-black/85"
+              style={{ maxHeight: "200px" }}
+            >
+              {modelOptions.map((modelOption) => (
+                <DropdownMenuItem
+                  key={modelOption}
+                  onClick={() => setModel(modelOption)}
+                  disabled={!isModelSelectionEnabled}
+                >
+                  {modelOption}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </PromptInputActions>
     </div>
   );
 }

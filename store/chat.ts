@@ -2,20 +2,13 @@ import { create } from "zustand";
 import { ChatMessage } from "@/lib/openai";
 import { nanoid } from "nanoid";
 
-type ChatMode = "chat" | "research" | "search";
+type ChatMode = "chat";
 type ModelType = string;
-
-type Source = {
-  title: string;
-  url: string;
-  summary?: string;
-  icon?: string;
-};
 
 type ChatStore = {
   messages: ChatMessage[];
-  addMessage: (content: string, role: ChatMessage["role"], sources?: Source[]) => void;
-  updateLastMessage: (content: string, sources?: Source[]) => void;
+  addMessage: (content: string, role: ChatMessage["role"]) => void;
+  updateLastMessage: (content: string) => void;
   isStreaming: boolean;
   setIsStreaming: (streaming: boolean) => void;
   mode: ChatMode;
@@ -26,7 +19,7 @@ type ChatStore = {
 
 export const useChatStore = create<ChatStore>((set) => ({
   messages: [],
-  addMessage: (content, role, sources) =>
+  addMessage: (content, role) =>
     set((state) => ({
       messages: [
         ...state.messages,
@@ -34,11 +27,10 @@ export const useChatStore = create<ChatStore>((set) => ({
           id: nanoid(),
           content,
           role,
-          sources, // Add sources here
         },
       ],
     })),
-  updateLastMessage: (content, sources) =>
+  updateLastMessage: (content) =>
     set((state) => {
       const lastMessageIndex = state.messages.length - 1;
       if (lastMessageIndex < 0) return state; // No messages yet
@@ -47,7 +39,6 @@ export const useChatStore = create<ChatStore>((set) => ({
       updatedMessages[lastMessageIndex] = {
         ...updatedMessages[lastMessageIndex],
         content: content,
-        sources: sources || [], // Update sources here
       };
 
       return { ...state, messages: updatedMessages };
