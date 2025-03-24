@@ -110,20 +110,20 @@ export function ChatInput() {
   };
 
   const modelOptions = [
+    "deepseek/deepseek-chat:free",
     "google/gemini-exp-1206:free",
     "google/gemini-2.0-pro-exp-02-05:free",
     "google/gemini-2.0-flash-thinking-exp:free",
     "google/gemini-2.0-flash-exp:free",
     "google/gemini-2.0-flash-lite-preview-02-05:free",
     "google/gemini-flash-1.5-8b-exp",
-    "deepseek/deepseek-r1-zero:free",
-    "deepseek/deepseek-r1:free",
+    // "deepseek/deepseek-r1-zero:free",
+    // "deepseek/deepseek-r1:free",
     "google/gemma-3-4b-it:free",
     "google/gemma-3-12b-it:free",
     "qwen/qwq-32b:free",
     "nousresearch/deephermes-3-llama-3-8b-preview:free",
     "qwen/qwen2.5-vl-72b-instruct:free",
-    "deepseek/deepseek-chat:free",
     "nvidia/llama-3.1-nemotron-70b-instruct:free",
     "meta-llama/llama-3.2-1b-instruct:free",
     "meta-llama/llama-3.2-11b-vision-instruct:free",
