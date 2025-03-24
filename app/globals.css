@@ -291,6 +291,6 @@ a {
 }
 
 .shiki .github-light{
-  @apply !bg-white/30
+  @apply !bg-red-50
 }
 
