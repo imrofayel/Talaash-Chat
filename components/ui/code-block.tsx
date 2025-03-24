@@ -49,7 +49,7 @@ function CodeBlockCode({
   }, [code, language, theme]);
 
   const classNames = cn(
-    "w-full overflow-x-auto text-[16px] roboto-mono [&>pre]:px-4 [&>pre]:py-3 !bg-white !backdrop-blur-none !bg-opacity-50",
+    "w-full overflow-x-auto text-[16px] roboto-mono leading-loose [&>pre]:px-4 [&>pre]:py-3 !bg-white !backdrop-blur-none !bg-opacity-50",
     className
   );
 

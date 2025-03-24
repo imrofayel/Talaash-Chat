@@ -32,10 +32,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
     if (isInline) {
       return (
         <span
-          className={cn(
-            "bg-primary-foreground p-1 rounded-sm px-1 font-mono !text-base",
-            className
-          )}
+          className={cn("bg-gray-50 p-1 !rounded-md px-1 font-mono !text-[18px]", className)}
           {...props}
         >
           {children}
@@ -88,7 +85,12 @@ function MarkdownComponent({
   const blocks = useMemo(() => parseMarkdownIntoBlocks(children), [children]);
 
   return (
-    <div className={className}>
+    <div
+      className={cn(
+        className,
+        "prose-p:py-2 prose-h2:text-4xl prose-h3:text-[34px] prose-headings:py-3 prose-h4:text-[32px] prose-h5:text-[32px] prose-h6:text-[32px]  prose-headings:italic prose-h1:text-[38px] prose-strong:font-medium prose-blockquote:italic prose-blockquote:text-2xl prose-blockquote:bg-white/30 prose-blockquote:my-2 prose-blockquote:pl-6 prose-blockquote:py-2 prose-hr:border-[#0d3c26] prose-hr:my-4 prose-hr:border-[1.4px]  "
+      )}
+    >
       {blocks.map((block, index) => (
         <MemoizedMarkdownBlock
           key={`${blockId}-block-${index}`}
