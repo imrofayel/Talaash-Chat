@@ -168,11 +168,11 @@ export function ChatInput() {
         onValueChange={handleValueChange}
         isLoading={isStreaming}
         onSubmit={handleSubmit}
-        className="relative flex h-full border cursor-text bg-white w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
+        className="relative flex h-full border cursor-text bg-[#fcf8f2] w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
       >
         <PromptInputTextarea
           placeholder="Talk with Raya!"
-          className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[22px]"
+          className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[26px] placeholder:italic italic !text-[26px]"
           rows={2}
         />
 
@@ -180,8 +180,8 @@ export function ChatInput() {
           size="icon"
           aria-label={isStreaming ? "Stop response" : "Send message"}
           className={cn(
-            "rounded-full transition-all duration-600  font-semibold !text-gray-950 disabled:opacity-100",
-            isStreaming ? "[&_svg]:!size-4.5 bg-[#faf3ea] hover:bg-[#faf3ea]" : "[&_svg]:!size-5",
+            "rounded-full transition-all duration-600 shadow-none font-semibold !text-gray-950 disabled:opacity-100",
+            isStreaming ? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]" : "[&_svg]:!size-5.5",
 
             input.trim() === ""
               ? "bg-[#faf3ea] !text-black/80"
@@ -202,7 +202,7 @@ export function ChatInput() {
                 variant="ghost"
                 aria-label="Select Model"
                 disabled={!isModelSelectionEnabled}
-                className={`h-8 w-auto gap-1 bg-white text-black/80 border p-1 !px-2 hover:bg-white  text-[16px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+                className={`h-8 w-auto gap-1 bg-white text-[#0d3c26] border p-1 !px-2 hover:bg-white  text-[17px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
                   isModelSelectionEnabled ? "opacity-100" : "opacity-30"
                 }`}
               >
@@ -212,7 +212,7 @@ export function ChatInput() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="w-[255px] rounded-xl overflow-auto bg-white   shadow-none text-[15px] text-black/85"
+              className="w-[255px] rounded-xl overflow-auto bg-white/60 backdrop-blur-3xl shadow-none text-[16px] text-[#0d3c26]"
               style={{ maxHeight: "200px" }}
             >
               {modelOptions.map((modelOption) => (
@@ -220,6 +220,7 @@ export function ChatInput() {
                   key={modelOption}
                   onClick={() => setModel(modelOption)}
                   disabled={!isModelSelectionEnabled}
+                  className="hover:!bg-green-50"
                 >
                   {modelOption}
                 </DropdownMenuItem>

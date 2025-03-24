@@ -9,7 +9,7 @@ export function Chat() {
   const { messages } = useChatStore();
 
   return (
-    <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] alpina w-full">
+    <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-4 alpina w-full">
       {messages.map((message) => (
         <Message key={message.id} className={cn(message.role === "user" && "self-end")}>
           <MessageContent
