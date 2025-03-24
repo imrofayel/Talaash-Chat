@@ -45,17 +45,17 @@ export function Chat() {
             {message.content}
           </MessageContent>
           {message.role === "assistant" && (
-            <MessageActions className="mt-2">
+            <MessageActions className={cn("mt-2 gap-4", message.content === "" && "hidden")}>
               <MessageAction tooltip="Copy">
                 <Copy
-                  className="h-4 w-4 cursor-pointer hover:opacity-70"
+                  className="h-4.5 w-4.5 cursor-pointer hover:opacity-70"
                   onClick={() => handleCopy(message.content)}
                 />
               </MessageAction>
               <MessageAction tooltip={isReading ? "Stop reading" : "Read aloud"}>
                 <Volume2Icon
                   className={cn(
-                    "h-4 w-4 cursor-pointer hover:opacity-70",
+                    "h-4.5 w-4.5 cursor-pointer hover:opacity-70",
                     isReading && "text-primary"
                   )}
                   onClick={() => handleRead(message.content)}
