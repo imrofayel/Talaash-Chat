@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 import { useChatStore } from "@/store/chat";
 import { Copy, Volume2Icon } from "lucide-react";
 import { useRef } from "react";
+import { stripMarkdown } from "@/lib/utils";
 
 export function Chat() {
-  const { messages, isReading, stopReading } = useChatStore();
+  const { messages, isReading, stopReading, voice, voiceRate, voicePitch } = useChatStore();
   const speakingRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const handleCopy = (content: string) => {
@@ -21,7 +22,13 @@ export function Chat() {
       return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(content);
+    const cleanText = stripMarkdown(content);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    if (voice) utterance.voice = voice;
+    utterance.rate = voiceRate;
+    utterance.pitch = voicePitch;
+
     speakingRef.current = utterance;
 
     utterance.onend = () => {

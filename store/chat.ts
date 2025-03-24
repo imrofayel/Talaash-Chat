@@ -17,6 +17,12 @@ type ChatStore = {
   setModel: (model: ModelType) => void;
   isReading: boolean;
   stopReading: () => void;
+  voice: SpeechSynthesisVoice | null;
+  setVoice: (voice: SpeechSynthesisVoice) => void;
+  voiceRate: number;
+  setVoiceRate: (rate: number) => void;
+  voicePitch: number;
+  setVoicePitch: (pitch: number) => void;
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -56,4 +62,10 @@ export const useChatStore = create<ChatStore>((set) => ({
     window.speechSynthesis.cancel();
     set({ isReading: false });
   },
+  voice: null,
+  setVoice: (voice) => set({ voice }),
+  voiceRate: 1,
+  setVoiceRate: (rate) => set({ voiceRate: rate }),
+  voicePitch: 1,
+  setVoicePitch: (pitch) => set({ voicePitch: pitch }),
 }));
