@@ -15,6 +15,8 @@ type ChatStore = {
   setMode: (mode: ChatMode) => void;
   model: ModelType;
   setModel: (model: ModelType) => void;
+  isReading: boolean;
+  stopReading: () => void;
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -49,4 +51,9 @@ export const useChatStore = create<ChatStore>((set) => ({
   setMode: (mode) => set({ mode: mode }),
   model: "deepseek/deepseek-chat:free", // Default model
   setModel: (model) => set({ model: model }),
+  isReading: false,
+  stopReading: () => {
+    window.speechSynthesis.cancel();
+    set({ isReading: false });
+  },
 }));
