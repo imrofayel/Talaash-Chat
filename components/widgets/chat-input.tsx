@@ -162,7 +162,7 @@ export function ChatInput() {
   const isModelSelectionEnabled = mode === "chat";
 
   return (
-    <div className="w-[60%] absolute bottom-4 flex flex-col justify-center items-center">
+    <div className="sm:w-[60%] w-full absolute bottom-4 flex flex-col justify-center items-center">
       <PromptInput
         value={input}
         onValueChange={handleValueChange}
