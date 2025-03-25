@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Raya - your friendly AI.",
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SidebarProvider>{children}</SidebarProvider>
+        <SidebarProvider>
+          {children}
+          <Analytics />
+        </SidebarProvider>
       </body>
     </html>
   );
