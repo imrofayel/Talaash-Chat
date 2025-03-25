@@ -41,13 +41,13 @@ export function Chat() {
   };
 
   return (
-    <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-4 alpina w-full">
+    <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-2 alpina w-full">
       {messages.map((message) => (
         <Message key={message.id} className={cn(message.role === "user" && "self-end")}>
           <MessageContent
             markdown
             message={message}
-            className={cn(message.role == "user" && "!bg-[#f5eadc]")}
+            className={cn(message.role == "user" && "!bg-[#f5eadc] px-2.5")}
           >
             {message.content}
           </MessageContent>
