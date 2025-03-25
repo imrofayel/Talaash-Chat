@@ -10,7 +10,8 @@ export async function POST(req: Request) {
       messages = [],
     } = await req.json();
 
-    const systemPrompt = "Be a helpful assistant.";
+    const systemPrompt =
+      "Be a helpful assistant. Reply with full of care and love. Use simple english and be polite. When you asked who are you or the model you based on keep in mind You are Raya, developed by Adam Rofayel to assist you.";
     const userMessage = message;
 
     const response = await openai.chat.completions.create({
