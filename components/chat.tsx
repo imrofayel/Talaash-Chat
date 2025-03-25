@@ -42,6 +42,12 @@ export function Chat() {
 
   return (
     <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-2 alpina w-full">
+      {messages.length === 0 && (
+        <div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
+          <p className="text-center text-4xl text-muted-foreground fraunces">Your friendly AI!</p>
+        </div>
+      )}
+
       {messages.map((message) => (
         <Message key={message.id} className={cn(message.role === "user" && "self-end")}>
           <MessageContent
