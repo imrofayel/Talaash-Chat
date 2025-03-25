@@ -2,7 +2,7 @@
 
 import { PromptInput, PromptInputActions, PromptInputTextarea } from "@/components/ui/prompt-input";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, ChevronDown, Square, Brain, ArrowUpRight, Search } from "lucide-react";
+import { ChevronDown, Square, ArrowUp } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "@/store/chat";
 import {
@@ -15,19 +15,44 @@ import { cn } from "@/lib/utils";
 
 export function ChatInput() {
   const [input, setInput] = useState<string>("");
-  const {
-    isStreaming,
-    setIsStreaming,
-    addMessage,
-    updateLastMessage,
-    mode,
-    setMode,
-    model,
-    setModel,
-  } = useChatStore();
+  const { isStreaming, setIsStreaming, addMessage, updateLastMessage, mode, model, setModel } =
+    useChatStore();
 
-  // type ChatMode = "chat" | "research" | "search";
   const abortController = useRef<AbortController | null>(null);
+  const [modelOptions, setModelOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const response = await fetch("/api/models");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch models: ${response.status}`);
+        }
+        const data = await response.json();
+
+        if (data && data.models && Array.isArray(data.models)) {
+          const modelSlugs = data.models.map((model: any) => model.slug);
+          setModelOptions(modelSlugs);
+        } else {
+          console.warn("Invalid models data structure:", data);
+          // Handle the unexpected structure (e.g., set default models)
+          setModelOptions([
+            "deepseek/deepseek-chat:free", // some default values
+            "google/gemini-exp-1206:free",
+          ]);
+        }
+      } catch (error) {
+        console.error("Error fetching models:", error);
+        // Handle the error (e.g., set default models, display a message)
+        setModelOptions([
+          "deepseek/deepseek-chat:free", // some default values
+          "google/gemini-exp-1206:free",
+        ]);
+      }
+    };
+
+    fetchModels();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -43,6 +68,9 @@ export function ChatInput() {
     abortController.current = new AbortController();
 
     addMessage(input.trim(), "user");
+
+    setInput("");
+
     setIsStreaming(true);
     addMessage("", "assistant");
 
@@ -64,7 +92,6 @@ export function ChatInput() {
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let accumulatedText = "";
-      let sources = [];
 
       try {
         while (true) {
@@ -76,17 +103,14 @@ export function ChatInput() {
           try {
             // Check if the chunk is a valid JSON (for sources)
             const jsonData = JSON.parse(chunk);
-            if (jsonData.sources) {
-              sources = jsonData.sources;
-            }
             if (jsonData.content) {
               accumulatedText = jsonData.content;
-              updateLastMessage(accumulatedText, sources);
+              updateLastMessage(accumulatedText);
             }
           } catch {
             // If not valid JSON, treat as text chunk
             accumulatedText += chunk;
-            updateLastMessage(accumulatedText, sources);
+            updateLastMessage(accumulatedText);
           }
         }
       } catch (error) {
@@ -114,157 +138,76 @@ export function ChatInput() {
     }
   };
 
-  const modelOptions = [
-    // KEEP THE COMMENTED OUT MODELS
-    // "deepseek/deepseek-r1-turbo",
-    // "deepseek/deepseek-v3-turbo",
-    "qwen/qwq-32b",
-    "meta-llama/llama-3.1-8b-instruct",
-    // "deepseek/deepseek-r1",
-    "deepseek/deepseek_v3",
-    "meta-llama/llama-3.1-70b-instruct",
-    "meta-llama/llama-3.3-70b-instruct",
-    "mistralai/mistral-nemo",
-    // "deepseek/deepseek-r1-distill-qwen-14b",
-    // "deepseek/deepseek-r1-distill-qwen-32b",
-    // "deepseek/deepseek-r1-distill-llama-70b",
-    "Sao10K/L3-8B-Stheno-v3.2",
-    "gryphe/mythomax-l2-13b",
-    // "deepseek/deepseek-r1-distill-llama-8b",
-    "qwen/qwen-2.5-72b-instruct",
-    "meta-llama/llama-3-8b-instruct",
-    "microsoft/wizardlm-2-8x22b",
-    "google/gemma-2-9b-it",
-    "mistralai/mistral-7b-instruct",
-    "meta-llama/llama-3-70b-instruct",
-    "openchat/openchat-7b",
-    "nousresearch/hermes-2-pro-llama-3-8b",
-    "sao10k/l3-70b-euryale-v2.1",
-    "cognitivecomputations/dolphin-mixtral-8x22b",
-    "jondurbin/airoboros-l2-70b",
-    "nousresearch/nous-hermes-llama2-13b",
-    "teknium/openhermes-2.5-mistral-7b",
-    "sophosympatheia/midnight-rose-70b",
-    "sao10k/l3-8b-lunaris",
-    "qwen/qwen-2-vl-72b-instruct",
-    "meta-llama/llama-3.2-1b-instruct",
-    "meta-llama/llama-3.2-11b-vision-instruct",
-    "meta-llama/llama-3.2-3b-instruct",
-    "meta-llama/llama-3.1-8b-instruct-bf16",
-    "sao10k/l31-70b-euryale-v2.2",
-    "qwen/qwen-2-7b-instruct",
-  ];
-
   const isModelSelectionEnabled = mode === "chat";
 
   return (
-    <div className="w-full absolute bottom-4 flex justify-center items-center">
+    <div className="md:w-[65%] w-[97%] absolute bottom-4 flex flex-col justify-center items-center z-20">
       <PromptInput
         value={input}
         onValueChange={handleValueChange}
         isLoading={isStreaming}
         onSubmit={handleSubmit}
-        className="w-full max-w-[38rem] !rounded-xl !bg-neutral-100 !p-1 drop-shadow-xs border !border-gray-200/60"
+        className="relative flex h-full border cursor-text bg-[#fcf8f2] w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
       >
         <PromptInputTextarea
-          placeholder="Ask Anything"
-          className="text-[16px] bg-white  placeholder:text-[16px] md:text-[16px] placeholder:text-gray-950 !mb-3 !rounded-lg drop-shadow-xs !px-3.5 !py-2.5 text-gray-950 outline-none ring-0 border-gray-100"
+          placeholder="Talk with Raya!"
+          className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[26px] placeholder:italic italic !text-[26px]"
           rows={2}
         />
-        <PromptInputActions className="flex h-[32px] items-center justify-between gap-2 !px-1 !mb-0.5">
-          <div className="flex flex-wrap items-center gap-x-1.5">
-            <Button
-              variant="ghost"
-              aria-label="Chat"
-              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                mode === "chat" && " bg-black/3 drop-shadow-none hover:bg-black/3"
-              }`}
-              onClick={() => {
-                setMode("chat");
-                setModel("deepseek/deepseek_v3");
-              }}
-            >
-              <MessageCircle color="#030712" />
-              Chat
-            </Button>
 
-            <Button
-              variant="ghost"
-              aria-label="Research"
-              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                mode === "research" && " bg-black/3 drop-shadow-none hover:bg-black/3"
-              }`}
-              onClick={() => {
-                setMode("research");
-                setModel("deepseek/deepseek-r1");
-              }}
-            >
-              <Brain />
-              Deepthink
-            </Button>
+        <Button
+          size="icon"
+          aria-label={isStreaming ? "Stop response" : "Send message"}
+          className={cn(
+            "rounded-full transition-all duration-600 shadow-none font-semibold !text-gray-950 disabled:opacity-100",
+            isStreaming ? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]" : "[&_svg]:!size-5.5",
 
-            <Button
-              variant="ghost"
-              aria-label="Search"
-              className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                mode === "search" && " bg-black/3 drop-shadow-none hover:bg-black/3"
-              }`}
-              onClick={() => {
-                setMode("search");
-                setModel("deepseek/deepseek_v3");
-              }}
-            >
-              <Search />
-              Search
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
-                <Button
-                  variant="ghost"
-                  aria-label="Select Model"
-                  disabled={!isModelSelectionEnabled}
-                  className={`h-7 w-auto gap-1 bg-white border text-gray-950 drop-shadow-xs p-1 !px-2 hover:bg-white border-gray-100 text-[15px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-lg ${
-                    isModelSelectionEnabled ? "opacity-100" : "opacity-30"
-                  }`}
-                >
-                  {model.split("/").pop()}
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-[250px] rounded-xl overflow-auto bg-white border-gray-200 !drop-shadow-xs shadow-none"
-                style={{ maxHeight: "200px" }}
-              >
-                {modelOptions.map((modelOption) => (
-                  <DropdownMenuItem
-                    key={modelOption}
-                    onClick={() => setModel(modelOption)}
-                    disabled={!isModelSelectionEnabled}
-                  >
-                    {modelOption}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="flex items-center gap-x-2.5">
-            <Button
-              size="icon"
-              aria-label={isStreaming ? "Stop response" : "Send message"}
-              className={cn(
-                "h-8 w-8 rounded-md p-1 font-semibold !text-gray-950 hover:bg-white bg-white",
-                isStreaming ? "[&_svg]:!size-4.5" : "[&_svg]:!size-5"
-              )}
-              onClick={isStreaming ? handleStop : handleSubmit}
-              disabled={!isStreaming && !input.trim()}
-            >
-              {isStreaming ? <Square className="[&_svg]:!size-4" /> : <ArrowUpRight />}
-            </Button>
-          </div>
-        </PromptInputActions>
+            input.trim() === ""
+              ? "bg-[#faf3ea] !text-black/80"
+              : "bg-[#038247] hover:bg-[#038247] !text-white"
+          )}
+          onClick={isStreaming ? handleStop : handleSubmit}
+          disabled={!isStreaming && !input.trim()}
+        >
+          {isStreaming ? <Square className="[&_svg]:!size-5" /> : <ArrowUp />}
+        </Button>
       </PromptInput>
+
+      <PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
+        <div className="flex items-start flex-wrap gap-x-1.5">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
+              <Button
+                variant="ghost"
+                aria-label="Select Model"
+                disabled={!isModelSelectionEnabled}
+                className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-white  text-[17px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+                  isModelSelectionEnabled ? "opacity-100" : "opacity-30"
+                }`}
+              >
+                {model.split("/").pop()}
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              className="rounded-xl overflow-auto bg-white/60 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
+              style={{ maxHeight: "200px" }}
+            >
+              {modelOptions.map((modelOption) => (
+                <DropdownMenuItem
+                  key={modelOption}
+                  onClick={() => setModel(modelOption)}
+                  disabled={!isModelSelectionEnabled}
+                  className="hover:!bg-[#faf3ea] rounded-lg"
+                >
+                  {modelOption}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </PromptInputActions>
     </div>
   );
 }

@@ -33,7 +33,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
       return (
         <span
           className={cn(
-            "bg-primary-foreground p-1 rounded-sm px-1 font-mono !text-base",
+            "!bg-red-50 text-red-700 p-1 !rounded-md px-1 font-mono !text-[17.3px]",
             className
           )}
           {...props}
@@ -88,7 +88,12 @@ function MarkdownComponent({
   const blocks = useMemo(() => parseMarkdownIntoBlocks(children), [children]);
 
   return (
-    <div className={className}>
+    <div
+      className={cn(
+        className,
+        "prose-p:py-2 prose-table:overflow-x-auto prose-table:block prose-h2:text-4xl prose-h3:text-[34px] prose-headings:py-3 prose-h4:text-[32px] prose-h5:text-[32px] prose-h6:text-[32px]  prose-headings:italic prose-h1:text-[38px] prose-strong:font-medium prose-blockquote:italic prose-blockquote:text-2xl prose-blockquote:bg-white/30 prose-blockquote:my-2 prose-blockquote:pl-6 prose-blockquote:py-2 prose-hr:border-[#0d3c26] prose-hr:my-4 prose-hr:border-[1.4px] prose-table:w-full  prose-td:border prose-td:p-2 prose-th:border prose-th:p-2 prose-th:bg-white/20 prose-table:border-collapse prose-th:font-medium prose-thead:text-2xl prose-table:bg-white/30 prose-table:my-3  prose-ul:italic prose-ol:italic prose-ol:text-2xl prose-ul:text-2xl prose-li:py-2 prose-ul:py-1 prose-ol:py-1 prose-th:italic prose-hr:hidden"
+      )}
+    >
       {blocks.map((block, index) => (
         <MemoizedMarkdownBlock
           key={`${blockId}-block-${index}`}

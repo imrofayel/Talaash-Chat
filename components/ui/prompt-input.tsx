@@ -68,7 +68,7 @@ function PromptInput({
           onSubmit,
         }}
       >
-        <div className={cn("bg-background rounded-4xl p-2 shadow-xs", className)}>{children}</div>
+        <div className={cn("bg-background rounded-4xl p-2", className)}>{children}</div>
       </PromptInputContext.Provider>
     </TooltipProvider>
   );
