@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="h-screen w-[97%] sm:w-[60%] relative mx-auto items-center !pb-4 flex flex-col">
+    <div className="h-screen w-[97%] md:w-[60%] relative mx-auto items-center !pb-4 flex flex-col">
       <h1 className="italic text-4xl fraunces w-full flex justify-between pt-6 sm:fixed left-8 items-center select-none sm:px-0 px-4 pb-3">
         <span>Raya</span>
 
