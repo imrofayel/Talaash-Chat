@@ -303,7 +303,3 @@ a {
   color: currentColor;
 }
 
-.shiki .github-light{
-  @apply !bg-red-50
-}
-
