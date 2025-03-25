@@ -220,7 +220,7 @@ export function ChatInput() {
                   key={modelOption}
                   onClick={() => setModel(modelOption)}
                   disabled={!isModelSelectionEnabled}
-                  className="hover:!bg-green-50"
+                  className="hover:!bg-[#faf3ea]"
                 >
                   {modelOption}
                 </DropdownMenuItem>
