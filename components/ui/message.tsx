@@ -48,7 +48,7 @@ const MessageContent = ({
   ...props
 }: MessageContentProps) => {
   const classNames = cn(
-    "rounded-xl  py-1 !text-[1.375rem]  break-words !leading-relaxed t-body-chat",
+    "rounded-xl  py-1 !text-[1.375rem]  break-words !leading-normal t-body-chat",
     className
   );
 

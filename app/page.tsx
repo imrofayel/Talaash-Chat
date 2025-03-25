@@ -9,7 +9,6 @@ export default function Home() {
         Raya
       </h1>
       {/* <AppSidebar /> */}
-      {/* <ChatHero/> */}
       <Chat />
       <ChatInput />
     </div>

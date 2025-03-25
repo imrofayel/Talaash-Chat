@@ -63,7 +63,7 @@ export function Chat() {
                 <Volume2Icon
                   className={cn(
                     "h-4.5 w-4.5 cursor-pointer hover:opacity-100 opacity-70",
-                    isReading && "text-primary"
+                    isReading && "!opacity-100"
                   )}
                   onClick={() => handleRead(message.content)}
                 />

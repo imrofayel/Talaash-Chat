@@ -202,7 +202,7 @@ export function ChatInput() {
                 variant="ghost"
                 aria-label="Select Model"
                 disabled={!isModelSelectionEnabled}
-                className={`h-8 w-auto gap-1 bg-white text-[#0d3c26] border p-1 !px-2 hover:bg-white  text-[17px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+                className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-white  text-[17px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
                   isModelSelectionEnabled ? "opacity-100" : "opacity-30"
                 }`}
               >
@@ -212,7 +212,7 @@ export function ChatInput() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="w-[255px] rounded-xl overflow-auto bg-white/60 backdrop-blur-3xl shadow-none text-[16px] text-[#0d3c26]"
+              className="rounded-xl overflow-auto bg-white/40 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
               style={{ maxHeight: "200px" }}
             >
               {modelOptions.map((modelOption) => (
