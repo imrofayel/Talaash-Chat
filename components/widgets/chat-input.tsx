@@ -121,7 +121,7 @@ export function ChatInput() {
     } catch (error: unknown) {
       if (error instanceof Error && error.name === "AbortError") return;
       console.error("Chat Error:", error);
-      updateLastMessage(" [Error: Message failed to complete]");
+      updateLastMessage("Sorry, something went wrong!");
     } finally {
       setIsStreaming(false);
     }
