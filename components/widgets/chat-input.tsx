@@ -15,18 +15,44 @@ import { cn } from "@/lib/utils";
 
 export function ChatInput() {
   const [input, setInput] = useState<string>("");
-  const {
-    isStreaming,
-    setIsStreaming,
-    addMessage,
-    updateLastMessage,
-    mode,
-    // setMode,
-    model,
-    setModel,
-  } = useChatStore();
+  const { isStreaming, setIsStreaming, addMessage, updateLastMessage, mode, model, setModel } =
+    useChatStore();
 
   const abortController = useRef<AbortController | null>(null);
+  const [modelOptions, setModelOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const response = await fetch("/api/models");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch models: ${response.status}`);
+        }
+        const data = await response.json();
+
+        if (data && data.models && Array.isArray(data.models)) {
+          const modelSlugs = data.models.map((model: any) => model.slug);
+          setModelOptions(modelSlugs);
+        } else {
+          console.warn("Invalid models data structure:", data);
+          // Handle the unexpected structure (e.g., set default models)
+          setModelOptions([
+            "deepseek/deepseek-chat:free", // some default values
+            "google/gemini-exp-1206:free",
+          ]);
+        }
+      } catch (error) {
+        console.error("Error fetching models:", error);
+        // Handle the error (e.g., set default models, display a message)
+        setModelOptions([
+          "deepseek/deepseek-chat:free", // some default values
+          "google/gemini-exp-1206:free",
+        ]);
+      }
+    };
+
+    fetchModels();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -42,6 +68,9 @@ export function ChatInput() {
     abortController.current = new AbortController();
 
     addMessage(input.trim(), "user");
+
+    setInput("");
+
     setIsStreaming(true);
     addMessage("", "assistant");
 
@@ -109,56 +138,6 @@ export function ChatInput() {
     }
   };
 
-  const modelOptions = [
-    "deepseek/deepseek-chat:free",
-    "google/gemini-exp-1206:free",
-    "google/gemini-2.0-pro-exp-02-05:free",
-    "google/gemini-2.0-flash-thinking-exp:free",
-    "google/gemini-2.0-flash-exp:free",
-    "google/gemini-2.0-flash-lite-preview-02-05:free",
-    "google/gemini-flash-1.5-8b-exp",
-    // "deepseek/deepseek-r1-zero:free",
-    // "deepseek/deepseek-r1:free",
-    "google/gemma-3-4b-it:free",
-    "google/gemma-3-12b-it:free",
-    "qwen/qwq-32b:free",
-    "nousresearch/deephermes-3-llama-3-8b-preview:free",
-    "qwen/qwen2.5-vl-72b-instruct:free",
-    "nvidia/llama-3.1-nemotron-70b-instruct:free",
-    "meta-llama/llama-3.2-1b-instruct:free",
-    "meta-llama/llama-3.2-11b-vision-instruct:free",
-    "meta-llama/llama-3.1-8b-instruct:free",
-    "mistralai/mistral-small-3.1-24b-instruct:free",
-    "deepseek/deepseek-r1-distill-llama-70b:free",
-    "mistralai/mistral-nemo:free",
-    "google/gemma-3-27b-it:free",
-    "deepseek/deepseek-r1-distill-qwen-14b:free",
-    "google/learnlm-1.5-pro-experimental:free",
-    "google/gemini-2.0-flash-thinking-exp-1219:free",
-    "open-r1/olympiccoder-7b:free",
-    "open-r1/olympiccoder-32b:free",
-    "rekaai/reka-flash-3:free",
-    "cognitivecomputations/dolphin3.0-r1-mistral-24b:free",
-    "cognitivecomputations/dolphin3.0-mistral-24b:free",
-    "mistralai/mistral-small-24b-instruct-2501:free",
-    "qwen/qwen-2.5-coder-32b-instruct:free",
-    "qwen/qwen-2.5-72b-instruct:free",
-    "google/gemma-3-1b-it:free",
-    "meta-llama/llama-3.2-3b-instruct:free",
-    "qwen/qwq-32b-preview:free",
-    "deepseek/deepseek-r1-distill-qwen-32b:free",
-    "moonshotai/moonlight-16b-a3b-instruct:free",
-    "qwen/qwen-2-7b-instruct:free",
-    "google/gemma-2-9b-it:free",
-    "mistralai/mistral-7b-instruct:free",
-    // "microsoft/phi-3-mini-128k-instruct:free",
-    // "microsoft/phi-3-medium-128k-instruct:free",
-    // "meta-llama/llama-3-8b-instruct:free",
-    // "openchat/openchat-7b:free",
-    // "meta-llama/llama-3.3-70b-instruct:free",
-    // "sophosympatheia/rogue-rose-103b-v0.2:free"
-  ];
-
   const isModelSelectionEnabled = mode === "chat";
 
   return (
@@ -212,7 +191,7 @@ export function ChatInput() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="rounded-xl overflow-auto bg-white/40 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
+              className="rounded-xl overflow-auto bg-white/60 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
               style={{ maxHeight: "200px" }}
             >
               {modelOptions.map((modelOption) => (
@@ -220,7 +199,7 @@ export function ChatInput() {
                   key={modelOption}
                   onClick={() => setModel(modelOption)}
                   disabled={!isModelSelectionEnabled}
-                  className="hover:!bg-[#faf3ea]"
+                  className="hover:!bg-[#faf3ea] rounded-lg"
                 >
                   {modelOption}
                 </DropdownMenuItem>

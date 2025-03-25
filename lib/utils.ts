@@ -17,3 +17,30 @@ export function stripMarkdown(text: string): string {
     .replace(/>\s?(.*)/g, "$1") // Blockquotes
     .replace(/\n\s*[-*+]\s/g, "\n"); // List items
 }
+
+export function filter_free_models(jsonData: { data: { models: any } }) {
+  const freeModels = [];
+
+  if (
+    !jsonData ||
+    !jsonData.data ||
+    !jsonData.data.models ||
+    !Array.isArray(jsonData.data.models)
+  ) {
+    console.error("Invalid JSON structure. Expected 'data' and 'models' keys with an array.");
+    return [];
+  }
+
+  const models = jsonData.data.models;
+
+  for (const model of models) {
+    if (model.endpoint && model.endpoint.pricing) {
+      const pricing = model.endpoint.pricing;
+      if (Object.values(pricing).every((value) => value === "0")) {
+        freeModels.push(model);
+      }
+    }
+  }
+
+  return freeModels;
+}
