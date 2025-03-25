@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export function ChatInput() {
   const [input, setInput] = useState<string>("");
@@ -181,7 +182,7 @@ export function ChatInput() {
                 variant="ghost"
                 aria-label="Select Model"
                 disabled={!isModelSelectionEnabled}
-                className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-white  text-[17px] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+                className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
                   isModelSelectionEnabled ? "opacity-100" : "opacity-30"
                 }`}
               >
@@ -191,7 +192,7 @@ export function ChatInput() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="rounded-xl overflow-auto bg-white/60 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
+              className="rounded-xl overflow-auto bg-white/60 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
               style={{ maxHeight: "200px" }}
             >
               {modelOptions.map((modelOption) => (
@@ -206,6 +207,16 @@ export function ChatInput() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Link href="/imagine">
+            <Button
+              variant="ghost"
+              aria-label="Select Model"
+              className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
+            >
+              Image Generator
+            </Button>
+          </Link>
         </div>
       </PromptInputActions>
     </div>
