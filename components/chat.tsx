@@ -41,7 +41,7 @@ export function Chat() {
   };
 
   return (
-    <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-2 alpina w-full">
+    <ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-2 alpina w-full z-10">
       {messages.length === 0 && (
         <div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
           <p className="text-center text-4xl text-muted-foreground fraunces">Your friendly AI!</p>
