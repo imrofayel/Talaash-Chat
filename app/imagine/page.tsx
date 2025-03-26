@@ -98,7 +98,9 @@ export default function ImageGenerator() {
             aria-label="Generate"
             className={cn(
               "rounded-full transition-all duration-600 shadow-none font-semibold !text-gray-950 disabled:opacity-100",
-              loading ? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]" : "[&_svg]:!size-5.5",
+              loading
+                ? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]"
+                : "[&_svg]:!size-5.5 bg-[#faf3ea] hover:bg-[#faf3ea]",
 
               prompt.trim() === ""
                 ? "bg-[#faf3ea] !text-black/80"
@@ -129,12 +131,12 @@ export default function ImageGenerator() {
                 height={1440}
                 src={imageUrl}
                 alt={`Generated image ${index + 1}`}
-                className="w-[410px] h-auto mb-4 drop-shadow-xs rounded-3xl"
+                className="w-[410px] h-auto mb-4 drop-shadow-xs"
               />
 
               <Link href={imageUrl} target="_blank" rel="noopener noreferrer">
                 <button
-                  className="rounded-xl bg-black/80  p-2 max-h-fit hover:bg-black/80 top-3 right-3 absolute text-white"
+                  className="rounded-xl bg-[#fcf8f2]  p-2 max-h-fit hover:bg-[#fcf8f2] top-3 right-3 absolute text-[#0d3c26]"
                   title="Download"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" viewBox="0 0 24 24">

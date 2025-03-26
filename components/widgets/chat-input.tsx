@@ -175,7 +175,7 @@ export function ChatInput() {
       </PromptInput>
 
       <PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
-        <div className="flex items-start flex-wrap gap-x-1.5">
+        <div className="flex items-start flex-wrap gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
               <Button
