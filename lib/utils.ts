@@ -18,7 +18,7 @@ export function stripMarkdown(text: string): string {
     .replace(/\n\s*[-*+]\s/g, "\n"); // List items
 }
 
-export function filter_free_models(jsonData: { data: { models: any } }) {
+export function filter_free_models(jsonData: { data: { models: any[] } }) {
   const freeModels = [];
 
   if (
@@ -34,9 +34,13 @@ export function filter_free_models(jsonData: { data: { models: any } }) {
   const models = jsonData.data.models;
 
   for (const model of models) {
-    if (model.endpoint && model.endpoint.pricing) {
+    if (model.endpoint?.pricing) {
       const pricing = model.endpoint.pricing;
-      if (Object.values(pricing).every((value) => value === "0")) {
+      // Check if all relevant pricing fields are "0"
+      const isFree =
+        pricing.prompt === "0" && pricing.completion === "0" && pricing.request === "0";
+
+      if (isFree) {
         freeModels.push(model);
       }
     }
