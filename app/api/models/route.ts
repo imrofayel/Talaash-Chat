@@ -1,22 +1,42 @@
 import { filter_free_models } from "@/lib/utils";
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 1 second
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function getFreeModels() {
-  try {
-    const response = await fetch("https://openrouter.ai/api/frontend/models/find?max_price=0");
-    if (!response.ok) {
-      console.log("OpenRouter API error:", response.statusText);
-      throw new Error(`HTTP error! status: ${response.status}`);
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await fetch("https://openrouter.ai/api/frontend/models/find?max_price=0");
+
+      if (!response.ok) {
+        console.log(
+          `OpenRouter API error (attempt ${attempt}/${MAX_RETRIES}):`,
+          response.statusText
+        );
+        if (attempt === MAX_RETRIES) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        await sleep(RETRY_DELAY);
+        continue;
+      }
+
+      const data = await response.json();
+      console.log("Successfully fetched models on attempt", attempt);
+      return filter_free_models(data);
+    } catch (error) {
+      console.error(`Attempt ${attempt}/${MAX_RETRIES} failed:`, error);
+      if (attempt === MAX_RETRIES) {
+        console.error("All retry attempts failed");
+        return [];
+      }
+      await sleep(RETRY_DELAY);
     }
-    if (response.ok) {
-      console.log("OpenRouter API response:", response.statusText);
-    }
-    const data = await response.json();
-    const freeModels = filter_free_models(data);
-    return freeModels;
-  } catch (error) {
-    console.error("Could not fetch models:", error);
-    return [];
   }
+  return []; // Fallback in case all retries fail
 }
 
 export async function GET() {
@@ -28,12 +48,12 @@ export async function GET() {
       },
     });
   } catch (error) {
+    console.error("API Error:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch models" }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.error("API Error:", error);
   }
 }
