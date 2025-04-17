@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const {
       message,
-      model = "deepseek/deepseek-r1:free",
+      model = "mistral-7b-instruct:free",
       // mode = "chat",
       messages = [],
     } = await req.json();
