@@ -26,7 +26,7 @@ export async function POST(req: Request) {
           content: userMessage,
         },
       ],
-      model: model,
+      model: model + ":free",
       stream: true,
       max_tokens: 2048,
       // temperature: 0.6,
