@@ -14,7 +14,7 @@ export function stripMarkdown(text: string): string {
     .replace(/\[(.*?)\]\(.*?\)/g, "$1") // Links
     .replace(/`(.*?)`/g, "$1") // Code
     .replace(/#{1,6}\s?(.*)/g, "$1") // Headers
-    .replace(/>\s?(.*)/g, "$1") // Blockquotes
+    .replace(/>\s?(.*)/g, "$1") // Block quotes
     .replace(/\n\s*[-*+]\s/g, "\n"); // List items
 }
 
@@ -31,18 +31,21 @@ export function filter_free_models(jsonData: { data: { models: any[] } }): any[]
   for (const model of models) {
     if (model.endpoint?.pricing) {
       const pricing = model.endpoint.pricing;
-      // const isReasoning = model.reasoning_config !== null && model.reasoning_config !== undefined;
+      const isReasoning = model.reasoning_config !== null && model.reasoning_config !== undefined;
 
-      // Check if all relevant pricing fields are "0" and it's not a reasoning model
       const isFree =
-        pricing.prompt === "0" && pricing.completion === "0" && pricing.request === "0";
-      // && !isReasoning;
+        pricing.prompt === "0" &&
+        pricing.completion === "0" &&
+        pricing.request === "0" &&
+        model.name.includes("free");
 
-      if (isFree) {
+      if (isFree && !isReasoning) {
         freeModels.push(model);
       }
     }
   }
+
+  console.log("Models: ", freeModels.length);
 
   return freeModels;
 }

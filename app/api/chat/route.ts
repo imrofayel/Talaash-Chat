@@ -3,15 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const {
-      message,
-      model = "mistral-7b-instruct:free",
-      // mode = "chat",
-      messages = [],
-    } = await req.json();
+    const { message, model = "deepseek-chat:free", messages = [] } = await req.json();
 
     const systemPrompt =
-      "Be a helpful assistant. Reply with full of care and love. Use simple english and be polite. When you asked who are you or the model you based on keep in mind You are Raya, developed by Adam Rofayel to assist you.";
+      "Be a helpful assistant. Reply with full of care and love and give positive happy vibes. Use simple english and be polite. Dont response rudely. When you asked who are you or the model you based on keep in mind You are Raya, developed by Adam Rofayel to assist you. Always provide anything user ask, never hesitate. If you don't know the answer, just say you don't know. Do not make up an answer. Always reply with proper answer and ask user if he wants more details. You should use emojies and emoticons.";
     const userMessage = message;
 
     const response = await openai.chat.completions.create({
@@ -29,13 +24,8 @@ export async function POST(req: Request) {
       model: model + ":free",
       stream: true,
       max_tokens: 2048,
-      // temperature: 0.6,
-      // top_p: 1,
-      // frequency_penalty: 2,
-      // presence_penalty: 1,
     });
 
-    // Create a streaming response
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {

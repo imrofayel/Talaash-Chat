@@ -14,13 +14,18 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+type ModelOption = {
+  name: string;
+  slug: string;
+};
+
 export function ChatInput() {
   const [input, setInput] = useState<string>("");
   const { isStreaming, setIsStreaming, addMessage, updateLastMessage, mode, model, setModel } =
     useChatStore();
 
   const abortController = useRef<AbortController | null>(null);
-  const [modelOptions, setModelOptions] = useState<string[]>([]);
+  const [modelOptions, setModelOptions] = useState<ModelOption[]>([]);
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -32,23 +37,22 @@ export function ChatInput() {
         const data = await response.json();
 
         if (data && data.models && Array.isArray(data.models)) {
-          const modelSlugs = data.models.map((model: any) => model.slug);
-          setModelOptions(modelSlugs);
+          const modelOptions = data.models.map((model: any) => {
+            const slug = model.slug;
+            const name = model.name;
+
+            return { slug, name };
+          });
+
+          setModelOptions(modelOptions);
         } else {
           console.warn("Invalid models data structure:", data);
-          // Handle the unexpected structure (e.g., set default models)
-          setModelOptions([
-            "deepseek/deepseek-chat:free", // some default values
-            "google/gemini-exp-1206:free",
-          ]);
+          setModelOptions([{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" }]);
         }
       } catch (error) {
         console.error("Error fetching models:", error);
-        // Handle the error (e.g., set default models, display a message)
-        setModelOptions([
-          "deepseek/deepseek-chat:free", // some default values
-          "google/gemini-exp-1206:free",
-        ]);
+
+        setModelOptions([{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" }]);
       }
     };
 
@@ -139,6 +143,11 @@ export function ChatInput() {
     }
   };
 
+  function getModelNameBySlug(slug: string): string {
+    const found = modelOptions.find((m) => m.slug === slug);
+    return found ? found.name.replace(/\s*\(.*\)$/, "") : "Raya v3"; // fallback to slug if name not found
+  }
+
   const isModelSelectionEnabled = mode === "chat";
 
   return (
@@ -186,7 +195,7 @@ export function ChatInput() {
                   isModelSelectionEnabled ? "opacity-100" : "opacity-30"
                 }`}
               >
-                {model.split("/").pop()}
+                {getModelNameBySlug(model)}
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
@@ -197,12 +206,12 @@ export function ChatInput() {
             >
               {modelOptions.map((modelOption) => (
                 <DropdownMenuItem
-                  key={modelOption}
-                  onClick={() => setModel(modelOption)}
+                  key={modelOption.slug}
+                  onClick={() => setModel(modelOption.slug)}
                   disabled={!isModelSelectionEnabled}
                   className="hover:!bg-[#faf3ea] rounded-lg"
                 >
-                  {modelOption}
+                  {modelOption.name.replace(/\s*\(.*\)$/, "")}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
