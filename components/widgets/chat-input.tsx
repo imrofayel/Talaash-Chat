@@ -1,240 +1,259 @@
 "use client";
 
-import { PromptInput, PromptInputActions, PromptInputTextarea } from "@/components/ui/prompt-input";
+import {
+	PromptInput,
+	PromptInputActions,
+	PromptInputTextarea,
+} from "@/components/ui/prompt-input";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Square, ArrowUp } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "@/store/chat";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 type ModelOption = {
-  name: string;
-  slug: string;
+	name: string;
+	slug: string;
 };
 
 export function ChatInput() {
-  const [input, setInput] = useState<string>("");
-  const { isStreaming, setIsStreaming, addMessage, updateLastMessage, mode, model, setModel } =
-    useChatStore();
+	const [input, setInput] = useState<string>("");
+	const {
+		isStreaming,
+		setIsStreaming,
+		addMessage,
+		updateLastMessage,
+		mode,
+		model,
+		setModel,
+	} = useChatStore();
 
-  const abortController = useRef<AbortController | null>(null);
-  const [modelOptions, setModelOptions] = useState<ModelOption[]>([]);
+	const abortController = useRef<AbortController | null>(null);
+	const [modelOptions, setModelOptions] = useState<ModelOption[]>([]);
 
-  useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        const response = await fetch("/api/models");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch models: ${response.status}`);
-        }
-        const data = await response.json();
+	useEffect(() => {
+		const fetchModels = async () => {
+			try {
+				const response = await fetch("/api/models");
+				if (!response.ok) {
+					throw new Error(`Failed to fetch models: ${response.status}`);
+				}
+				const data = await response.json();
 
-        if (data && data.models && Array.isArray(data.models)) {
-          const modelOptions = data.models.map((model: any) => {
-            const slug = model.slug;
-            const name = model.name;
+				if (data && data.models && Array.isArray(data.models)) {
+					const modelOptions = data.models.map((model: ModelOption) => {
+						const slug = model.slug;
+						const name = model.name;
 
-            return { slug, name };
-          });
+						return { slug, name };
+					});
 
-          setModelOptions(modelOptions);
-        } else {
-          console.warn("Invalid models data structure:", data);
-          setModelOptions([{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" }]);
-        }
-      } catch (error) {
-        console.error("Error fetching models:", error);
+					setModelOptions(modelOptions);
+				} else {
+					console.warn("Invalid models data structure:", data);
+					setModelOptions([
+						{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" },
+					]);
+				}
+			} catch (error) {
+				console.error("Error fetching models:", error);
 
-        setModelOptions([{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" }]);
-      }
-    };
+				setModelOptions([
+					{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" },
+				]);
+			}
+		};
 
-    fetchModels();
-  }, []);
+		fetchModels();
+	}, []);
 
-  useEffect(() => {
-    return () => {
-      abortController.current?.abort();
-    };
-  }, []);
+	useEffect(() => {
+		return () => {
+			abortController.current?.abort();
+		};
+	}, []);
 
-  const handleSubmit = async () => {
-    if (!input.trim() || isStreaming) return;
+	function getModelNameBySlug(slug: string): string {
+		const found = modelOptions.find((m) => m.slug === slug);
+		return found ? found.name.replace(/\s*\(.*\)$/, "") : "Raya v3"; // fallback to slug if name not found
+	}
 
-    // Abort previous request if exists
-    abortController.current?.abort();
-    abortController.current = new AbortController();
+	const handleSubmit = async () => {
+		if (!input.trim() || isStreaming) return;
 
-    addMessage(input.trim(), "user");
+		// Abort previous request if exists
+		abortController.current?.abort();
+		abortController.current = new AbortController();
 
-    setInput("");
+		addMessage(input.trim(), "user", getModelNameBySlug(model));
 
-    setIsStreaming(true);
-    addMessage("", "assistant");
+		setInput("");
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: input,
-          mode,
-          model,
-          messages: useChatStore.getState().messages,
-        }),
-        signal: abortController.current.signal,
-      });
+		setIsStreaming(true);
+		addMessage("", "assistant", getModelNameBySlug(model));
 
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData?.error || `HTTP Error: ${response.status}`);
-      }
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let accumulatedText = "";
+		try {
+			const response = await fetch("/api/chat", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					message: input,
+					mode,
+					model,
+					messages: useChatStore.getState().messages,
+				}),
+				signal: abortController.current.signal,
+			});
 
-      try {
-        while (true) {
-          const { done, value } = await reader!.read();
-          if (done) break;
+			if (!response.ok) {
+				const errData = await response.json();
+				throw new Error(errData?.error || `HTTP Error: ${response.status}`);
+			}
+			const reader = response.body?.getReader();
+			const decoder = new TextDecoder();
+			let accumulatedText = "";
 
-          const chunk = decoder.decode(value, { stream: true });
+			try {
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) break;
 
-          try {
-            // Check if the chunk is a valid JSON (for sources)
-            const jsonData = JSON.parse(chunk);
-            if (jsonData.content) {
-              accumulatedText = jsonData.content;
-              updateLastMessage(accumulatedText);
-            }
-          } catch {
-            // If not valid JSON, treat as text chunk
-            accumulatedText += chunk;
-            updateLastMessage(accumulatedText);
-          }
-        }
-      } catch (error) {
-        console.error("Streaming error:", error);
-      }
+					const chunk = decoder.decode(value, { stream: true });
 
-      setInput("");
-    } catch (error: unknown) {
-      if (error instanceof Error && error.name === "AbortError") return;
-      console.error("Chat Error:", error);
-      updateLastMessage(`Sorry, something went wrong!
+					try {
+						// Check if the chunk is a valid JSON (for sources)
+						const jsonData = JSON.parse(chunk);
+						if (jsonData.content) {
+							accumulatedText = jsonData.content;
+							updateLastMessage(accumulatedText);
+						}
+					} catch {
+						// If not valid JSON, treat as text chunk
+						accumulatedText += chunk;
+						updateLastMessage(accumulatedText);
+					}
+				}
+			} catch (error) {
+				console.error("Streaming error:", error);
+			}
+
+			setInput("");
+		} catch (error: unknown) {
+			if (error instanceof Error && error.name === "AbortError") return;
+			console.error("Chat Error:", error);
+			updateLastMessage(`Sorry, something went wrong!
 
 \`\`\`bash
 ${error}
 \`\`\`
 `);
-    } finally {
-      setIsStreaming(false);
-    }
-  };
+		} finally {
+			setIsStreaming(false);
+		}
+	};
 
-  const handleValueChange = (value: string) => {
-    setInput(value);
-  };
+	const handleValueChange = (value: string) => {
+		setInput(value);
+	};
 
-  const handleStop = () => {
-    if (abortController.current) {
-      abortController.current.abort();
-      abortController.current = null;
-    }
-  };
+	const handleStop = () => {
+		if (abortController.current) {
+			abortController.current.abort();
+			abortController.current = null;
+		}
+	};
 
-  function getModelNameBySlug(slug: string): string {
-    const found = modelOptions.find((m) => m.slug === slug);
-    return found ? found.name.replace(/\s*\(.*\)$/, "") : "Raya v3"; // fallback to slug if name not found
-  }
+	const isModelSelectionEnabled = mode === "chat";
 
-  const isModelSelectionEnabled = mode === "chat";
+	return (
+		<div className="md:w-[80%] w-[97%] absolute bottom-4 flex flex-col justify-center items-center z-20">
+			<PromptInput
+				value={input}
+				onValueChange={handleValueChange}
+				isLoading={isStreaming}
+				onSubmit={handleSubmit}
+				className="relative flex h-full border cursor-text bg-[#fcf8f2] w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
+			>
+				<PromptInputTextarea
+					placeholder="Talk with Raya!"
+					className="t-body-chat geist block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[23px] !text-[20px]"
+					rows={2}
+				/>
 
-  return (
-    <div className="md:w-[65%] w-[97%] absolute bottom-4 flex flex-col justify-center items-center z-20">
-      <PromptInput
-        value={input}
-        onValueChange={handleValueChange}
-        isLoading={isStreaming}
-        onSubmit={handleSubmit}
-        className="relative flex h-full border cursor-text bg-[#fcf8f2] w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
-      >
-        <PromptInputTextarea
-          placeholder="Talk with Raya!"
-          className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[26px] placeholder:italic italic !text-[26px]"
-          rows={2}
-        />
+				<Button
+					size="icon"
+					aria-label={isStreaming ? "Stop response" : "Send message"}
+					className={cn(
+						"rounded-full transition-all duration-600 shadow-none font-semibold !text-gray-950 disabled:opacity-100",
+						isStreaming
+							? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]"
+							: "[&_svg]:!size-5.5",
 
-        <Button
-          size="icon"
-          aria-label={isStreaming ? "Stop response" : "Send message"}
-          className={cn(
-            "rounded-full transition-all duration-600 shadow-none font-semibold !text-gray-950 disabled:opacity-100",
-            isStreaming ? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]" : "[&_svg]:!size-5.5",
+						input.trim() === ""
+							? "bg-[#faf3ea] !text-black/80"
+							: "bg-[#038247] hover:bg-[#038247] !text-white",
+					)}
+					onClick={isStreaming ? handleStop : handleSubmit}
+					disabled={!isStreaming && !input.trim()}
+				>
+					{isStreaming ? <Square className="[&_svg]:!size-5" /> : <ArrowUp />}
+				</Button>
+			</PromptInput>
 
-            input.trim() === ""
-              ? "bg-[#faf3ea] !text-black/80"
-              : "bg-[#038247] hover:bg-[#038247] !text-white"
-          )}
-          onClick={isStreaming ? handleStop : handleSubmit}
-          disabled={!isStreaming && !input.trim()}
-        >
-          {isStreaming ? <Square className="[&_svg]:!size-5" /> : <ArrowUp />}
-        </Button>
-      </PromptInput>
+			<PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
+				<div className="flex items-start flex-wrap gap-2">
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
+							<Button
+								variant="ghost"
+								aria-label="Select Model"
+								disabled={!isModelSelectionEnabled}
+								className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+									isModelSelectionEnabled ? "opacity-100" : "opacity-30"
+								}`}
+							>
+								{getModelNameBySlug(model)}
+								<ChevronDown className="h-3 w-3" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent
+							align="start"
+							className="rounded-xl overflow-auto bg-white/60 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
+							style={{ maxHeight: "200px" }}
+						>
+							{modelOptions.map((modelOption) => (
+								<DropdownMenuItem
+									key={modelOption.slug}
+									onClick={() => setModel(modelOption.slug)}
+									disabled={!isModelSelectionEnabled}
+									className="hover:!bg-[#faf3ea] rounded-lg"
+								>
+									{modelOption.name.replace(/\s*\(.*\)$/, "")}
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</DropdownMenu>
 
-      <PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
-        <div className="flex items-start flex-wrap gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
-              <Button
-                variant="ghost"
-                aria-label="Select Model"
-                disabled={!isModelSelectionEnabled}
-                className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
-                  isModelSelectionEnabled ? "opacity-100" : "opacity-30"
-                }`}
-              >
-                {getModelNameBySlug(model)}
-                <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="start"
-              className="rounded-xl overflow-auto bg-white/60 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
-              style={{ maxHeight: "200px" }}
-            >
-              {modelOptions.map((modelOption) => (
-                <DropdownMenuItem
-                  key={modelOption.slug}
-                  onClick={() => setModel(modelOption.slug)}
-                  disabled={!isModelSelectionEnabled}
-                  className="hover:!bg-[#faf3ea] rounded-lg"
-                >
-                  {modelOption.name.replace(/\s*\(.*\)$/, "")}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+					{/* Image Generator - Disabled for now due to cost of API */}
 
-          <Link href="/imagine">
-            <Button
-              variant="ghost"
-              aria-label="Select Model"
-              className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
-            >
-              Image Generator
-            </Button>
-          </Link>
-        </div>
-      </PromptInputActions>
-    </div>
-  );
+					{/* <Link href="/imagine">
+						<Button
+							variant="ghost"
+							aria-label="Select Model"
+							className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
+						>
+							Image Generator
+						</Button>
+					</Link> */}
+				</div>
+			</PromptInputActions>
+		</div>
+	);
 }
