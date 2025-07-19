@@ -92,8 +92,10 @@ export function ChatInput() {
         signal: abortController.current.signal,
       });
 
-      if (!response.ok) throw new Error("Failed to send message");
-
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error || `HTTP Error: ${response.status}`);
+      }
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let accumulatedText = "";
@@ -126,7 +128,12 @@ export function ChatInput() {
     } catch (error: unknown) {
       if (error instanceof Error && error.name === "AbortError") return;
       console.error("Chat Error:", error);
-      updateLastMessage("Sorry, something went wrong!");
+      updateLastMessage(`Sorry, something went wrong!
+
+\`\`\`bash
+${error}
+\`\`\`
+`);
     } finally {
       setIsStreaming(false);
     }
