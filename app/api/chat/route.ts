@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const {
       message,
-      model = "deepseek/deepseek-r1:free",
+      model = "mistral-7b-instruct:free",
       // mode = "chat",
       messages = [],
     } = await req.json();
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
           content: userMessage,
         },
       ],
-      model: model,
+      model: model + ":free",
       stream: true,
       max_tokens: 2048,
       // temperature: 0.6,
