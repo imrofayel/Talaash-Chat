@@ -153,6 +153,14 @@ export function ChatInput() {
 \`\`\`bash
 ${error}
 \`\`\`
+
+\`\`\`mermaid
+graph TD;
+  A-->B;  A-->C;
+  B-->D;
+  C-->D;
+\`\`\`
+
 `);
 		} finally {
 			setIsStreaming(false);

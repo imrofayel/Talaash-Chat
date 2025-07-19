@@ -4,6 +4,7 @@ import { memo, useId, useMemo } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock, CodeBlockCode } from "./code-block";
+import { Mermaid } from "../mermaid";
 
 export type MarkdownProps = {
 	children: string;
@@ -33,7 +34,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
 			return (
 				<span
 					className={cn(
-						"!bg-red-50 text-red-700 p-1 !rounded-md px-1 font-mono !text-[17.3px]",
+						"!bg-red-50 text-red-700 p-1 !rounded-md px-1 font-mono !text-[17px]",
 						className,
 					)}
 					{...props}
@@ -44,6 +45,10 @@ const INITIAL_COMPONENTS: Partial<Components> = {
 		}
 
 		const language = extractLanguage(className);
+
+		if (language === "mermaid") {
+			return <Mermaid chart={String(children).trim()} />;
+		}
 
 		return (
 			<CodeBlock className={cn(className)}>
