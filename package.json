@@ -57,6 +57,7 @@
 		"@biomejs/biome": "2.1.2",
 		"@eslint/eslintrc": "^3",
 		"@iconify-json/solar": "^1.2.2",
+		"@iconify-json/vscode-icons": "^1.2.23",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",

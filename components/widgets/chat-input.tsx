@@ -197,8 +197,9 @@ ${error}
 					{isStreaming ? (
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							width="1.5em"
+							width="2em"
 							viewBox="0 0 24 24"
+							className="scale-110"
 						>
 							<title>Loading</title>
 							<path

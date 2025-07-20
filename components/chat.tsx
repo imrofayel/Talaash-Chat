@@ -51,9 +51,6 @@ export function Chat() {
 				<div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
 					<p className="text-center text-3xl !text-[#5e7e5f] fraunces">
 						Your friendly AI!
-						<p className="geist font-normal text-[19px] my-5 bg-[#e5f0df] p-1 rounded-lg border border-[#899c8d] px-1.5 text-[#435346]">
-							Some of the models may not work due to API issues.
-						</p>
 					</p>
 				</div>
 			)}

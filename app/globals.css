@@ -37,7 +37,7 @@ code {
 	font-family: "Geist Mono", monospace !important;
 	font-optical-sizing: auto;
 	font-style: normal;
-	line-height: 2.3rem;
+	line-height: 1.8rem !important;
 }
 
 @media (min-width: 1024px) {
@@ -72,9 +72,9 @@ code {
 }
 
 .nodeLabel {
-	@apply relative -top-2;
+	@apply relative -top-1.5;
 	font-family: "GT Alpina Trial", sans-serif;
-	font-size: 24px;
+	font-size: 26px;
 }
 
 .t-heading-s {
@@ -308,6 +308,11 @@ a {
 	}
 }
 
+foreignObject {
+	width: 100% !important;
+	height: 60px !important;
+}
+
 .scrollbar-hidden {
 	scrollbar-width: none;
 	-ms-overflow-style: none;
@@ -324,6 +329,7 @@ a {
 }
 
 .font-mono {
+	font-family: "Geist Mono", monospace !important;
 	font-feature-settings: "mono" 1;
 }
 
