@@ -63,7 +63,7 @@ export default function ImageGenerator() {
 	return (
 		<div className="h-screen w-[97%] md:w-[60%] relative mx-auto items-center !pb-4 flex flex-col">
 			<h1 className="italic text-4xl fraunces w-full flex justify-between pt-6 sm:fixed left-8 items-center select-none sm:px-0 px-4 pb-3">
-				<span>Imagine Raya!</span>
+				<span>Imagine Talaash!</span>
 
 				<Link href="https://github.com/imrofayel">
 					<svg
@@ -89,7 +89,7 @@ export default function ImageGenerator() {
 					className="relative flex h-full border cursor-text bg-[#fcf8f2] w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
 				>
 					<PromptInputTextarea
-						placeholder="Imagine with Raya!"
+						placeholder="Imagine with Talaash!"
 						className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[26px] placeholder:italic italic !text-[26px]"
 						rows={2}
 					/>
@@ -118,7 +118,7 @@ export default function ImageGenerator() {
 			{images.length === 0 && (
 				<div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
 					<p className="text-center text-4xl text-muted-foreground fraunces">
-						Create images with Raya
+						Create images with Talaash
 					</p>
 				</div>
 			)}
@@ -137,7 +137,7 @@ export default function ImageGenerator() {
 
 							<Link href={imageUrl} target="_blank" rel="noopener noreferrer">
 								<button
-									className="rounded-xl bg-[#fcf8f2]  p-2 max-h-fit hover:bg-[#fcf8f2] top-3 right-3 absolute text-[#0d3c26]"
+									className="rounded-xl bg-[#fcf8f2]  p-2 max-h-fit hover:bg-[#fcf8f2] top-3 right-3 absolute text-[#435346]"
 									title="Download"
 									type="button"
 								>

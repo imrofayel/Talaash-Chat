@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 		} = await req.json();
 
 		const systemPrompt =
-			"Be a helpful assistant. Reply with full of care and love..."; // trimmed
+			"Be a helpful assistant. Reply with full of care and love and give positive happy vibes. Use simple english and be polite. Dont response rudely. When you asked who are you or the model you based on keep in mind You are Talaash, developed by Adam Rofayel to assist you. Always reply with proper and concise answer and ask user if he wants more details. You can use Mermaid to draw diagrams and flowcharts.";
 
 		const response = await openai.chat.completions.create({
 			messages: [
@@ -44,7 +44,6 @@ export async function POST(req: Request) {
 	} catch (error) {
 		console.error("OpenRouter error:", error);
 
-		// If the OpenAI client provides structured error response
 		if (error?.response) {
 			const errorData = await error.response.json?.();
 			return NextResponse.json(

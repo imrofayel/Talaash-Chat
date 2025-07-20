@@ -89,7 +89,7 @@ export type PromptInputTextareaProps = {
 function PromptInputTextarea({
 	className,
 	onKeyDown,
-	disableAutosize = false,
+	disableAutosize = true,
 	...props
 }: PromptInputTextareaProps) {
 	const { value, setValue, maxHeight, onSubmit, disabled } = usePromptInput();

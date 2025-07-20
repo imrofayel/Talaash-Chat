@@ -17,29 +17,19 @@ export function Mermaid({ chart }: { chart: string }) {
             `;
 
 			// Always prepend hand-drawn config
-			const code = `%%{init: {
-  "flowchart": {
-    "htmlLabels": false,
-    "wrap": true,
-    "nodeSpacing": 50,
-    "rankSpacing": 40
-  },
-  "theme": "default",
-  "themeVariables": {
-    "fontFamily": "Geist",
-    "fontSize": "23mpx",
-    "primaryColor": "#f5f5f5",
-    "primaryTextColor": "#222",
-    "primaryBorderColor": "#7c3aed",
-    "lineColor": "#000",
-    "textWrapPadding": 40
-  }
-}}%%\n${chart.trim()}`;
+			const code = `---
+config:
+  theme: 'default'
+  look: 'handDrawn'
+  themeVariables:
+    mainBkg: '#ffffff'
+---\n${chart.trim()}`;
 
 			(async () => {
 				try {
 					const { svg } = await mermaid.render(id, code);
 					ref.current!.innerHTML = svg;
+					// biome-ignore lint/correctness/noUnusedVariables: <>
 				} catch (e) {
 					const { svg } = await mermaid.render(id, fallback);
 					ref.current!.innerHTML = svg;

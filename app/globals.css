@@ -8,6 +8,8 @@
 
 @import "tailwindcss";
 
+@unocss all;
+
 @plugin "tailwindcss-animate";
 
 @plugin "@tailwindcss/typography";
@@ -31,13 +33,14 @@
 	font-variation-settings:
 		"SOFT" 100,
 		"WONK" 1;
-	color: #0d3c26;
+	color: #435346 !important;
 }
 
-.roboto-mono {
-	font-family: "Roboto Mono", monospace !important;
+code {
+	font-family: "Geist Mono", monospace !important;
 	font-optical-sizing: auto;
 	font-style: normal;
+	line-height: 2.3rem;
 }
 
 @media (min-width: 1024px) {
@@ -71,6 +74,12 @@
 	letter-spacing: -0.22px;
 }
 
+.nodeLabel {
+	@apply relative -top-2;
+	font-family: "GT Alpina Trial", sans-serif;
+	font-size: 24px;
+}
+
 .t-heading-s {
 	font-family:
 		"GT Alpina Trial", ui-serif, Georgia, Cambria, "Times New Roman", Times,
@@ -78,6 +87,13 @@
 	font-size: 1.25rem !important;
 	letter-spacing: -0.19px;
 	font-weight: 400;
+}
+
+blockquote {
+	p {
+		font-size: 24px;
+		line-height: 2.5rem;
+	}
 }
 
 .outline-none {
@@ -106,7 +122,6 @@
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	/* background-color: #faf3ea; */
 	background-color: #ffffff;
 }
 
@@ -130,7 +145,6 @@ body {
 body {
 	box-sizing: border-box;
 	font-family: "Geist", sans-serif;
-	/* @apply !text-gray-950 */
 }
 
 a {
@@ -314,6 +328,18 @@ a {
 
 .font-mono {
 	font-feature-settings: "mono" 1;
+}
+
+ol {
+	list-style-type: decimal-leading-zero !important;
+	list-style-position: inside !important;
+	padding-left: 0.5rem !important;
+}
+
+ul {
+	list-style-type: disc !important;
+	list-style-position: inside !important;
+	padding-left: 1rem !important;
 }
 
 .thinking-cursor::after {

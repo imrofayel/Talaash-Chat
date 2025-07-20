@@ -114,7 +114,7 @@ function CodeBlockCode({
 	}, [code, language, theme]);
 
 	const classNames = cn(
-		"w-full overflow-x-auto text-[16px] roboto-mono leading-loose [&>pre]:px-4 [&>pre]:py-3 !backdrop-blur-none",
+		"w-full overflow-x-auto text-[16px] leading-loose [&>pre]:px-4 [&>pre]:py-3 !backdrop-blur-none",
 		className,
 	);
 
@@ -123,49 +123,19 @@ function CodeBlockCode({
 			<div className="absolute right-2 top-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 				<button
 					onClick={handleCopy}
-					className="rounded-xl bg-[#faf3ea] backdrop-blur-3xl p-2 max-h-fit hover:bg-[#faf3ea] text-[#0d3c26]"
-					title="Copy code"
+					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] p-1.5 border-[#899c8d]"
+					title="Copy Code"
 					type="button"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="19"
-						viewBox="0 0 24 24"
-					>
-						<title>Copy Icon</title>
-						<g
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-						>
-							<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-							<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-						</g>
-					</svg>
+					<div className="i-solar:copy-linear hover:opacity-80 text-[22px]" />
 				</button>
 				<button
 					onClick={handleDownload}
-					className="rounded-xl bg-[#faf3ea] backdrop-blur-3xl p-2 max-h-fit hover:bg-[#faf3ea] text-[#0d3c26]"
-					title="Download code"
+					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] p-1.5 border-[#899c8d]"
+					title="Download Code"
 					type="button"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="19"
-						viewBox="0 0 24 24"
-					>
-						<title>Download Icon</title>
-						<path
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5l5 5l5-5m-5 5V3"
-						/>
-					</svg>
+					<div className="i-solar:arrow-down-linear hover:opacity-80 scale-105 text-[22px]" />
 				</button>
 			</div>
 			{highlightedHtml ? (

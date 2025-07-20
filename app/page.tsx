@@ -5,15 +5,15 @@ import Link from "next/link";
 export default function Home() {
 	return (
 		<div className="h-screen w-[97%] md:w-[60%] relative mx-auto items-center !pb-4 flex flex-col">
-			<h1 className="italic text-4xl fraunces w-full flex justify-between pt-6 sm:fixed left-8 items-center select-none sm:px-0 px-4 pb-3">
-				<span>Raya</span>
+			<h1 className="italic text-3xl fraunces w-full flex justify-between pt-6 sm:fixed left-8 items-center select-none sm:px-0 px-4 pb-3">
+				<span className="!text-[#5e7e5f]">Talaash</span>
 
-				<Link href="https://github.com/imrofayel">
+				<Link href="https://github.com/imrofayel/">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="28"
 						viewBox="0 0 24 24"
-						className="sm:fixed right-8 top-5 cursor-pointer !z-[100]"
+						className="sm:fixed right-8 top-5 cursor-pointer text-[#5e7e5f] !z-[100]"
 					>
 						<title>GitHub Icons</title>
 						<path

@@ -56,16 +56,20 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.1.2",
 		"@eslint/eslintrc": "^3",
+		"@iconify-json/solar": "^1.2.2",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"@unocss/postcss": "^66.3.3",
+		"@unocss/reset": "^66.3.3",
 		"eslint": "^9",
 		"eslint-config-next": "15.2.0",
 		"git-format-staged": "^3.1.1",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.4.3",
 		"prettier": "3.5.2",
-		"typescript": "^5"
+		"typescript": "^5",
+		"unocss": "^66.3.3"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

@@ -47,7 +47,7 @@ export function Chat() {
 	};
 
 	return (
-		<ChatContainer className="flex gap-3 !text-[#0d3c26] pb-[120px] pt-6 px-2 alpina w-full z-10">
+		<ChatContainer className="flex gap-3 scrollbar-hidden !text-[#435346] !pb-[120px] pt-6 px-2 alpina w-full z-10">
 			{messages.length === 0 && (
 				<div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
 					<p className="text-center text-4xl text-muted-foreground fraunces">
@@ -63,9 +63,12 @@ export function Chat() {
 				>
 					<MessageContent
 						model={message.model}
-						markdown
+						markdown={message.role !== "user"}
 						message={message}
-						className={cn(message.role === "user" && "!bg-[#f5eadc] px-2.5")}
+						className={cn(
+							message.role === "user" &&
+								"!bg-[#e5f0df] border-[#899c8d]  border !text-[21px] !py-1 px-2.5",
+						)}
 					>
 						{message.content}
 					</MessageContent>
@@ -73,24 +76,39 @@ export function Chat() {
 						<MessageActions
 							className={cn("mt-2 gap-4", message.content === "" && "hidden")}
 						>
-							<div>{message.model}</div>
+							<MessageAction tooltip="Model">
+								<div
+									className="bg-[#e5f0df] p-0.5 rounded-full drop-shadow-xs px-2 border-[#899c8d] border text-[#435346]"
+									style={{ fontFamily: "Geist" }}
+								>
+									{message.model}
+								</div>
+							</MessageAction>
 
 							<MessageAction tooltip="Copy">
-								<Copy
-									className="h-4.5 w-4.5 cursor-pointer hover:opacity-100 opacity-70"
+								<button
 									onClick={() => handleCopy(message.content)}
-								/>
+									type="button"
+								>
+									<div className="i-solar:copy-linear cursor-pointer hover:opacity-80 opacity-100 text-[22px]" />
+								</button>
 							</MessageAction>
 							<MessageAction
 								tooltip={isReading ? "Stop reading" : "Read aloud"}
 							>
-								<Volume2Icon
-									className={cn(
-										"h-4.5 w-4.5 cursor-pointer hover:opacity-100 opacity-70",
-										isReading && "!opacity-100",
-									)}
+								<button
 									onClick={() => handleRead(message.content)}
-								/>
+									type="button"
+								>
+									<div
+										className={cn(
+											" cursor-pointer hover:opacity-80 opacity-100 !text-[23px]",
+											isReading
+												? "i-solar:volume-cross-line-duotone"
+												: "i-solar:volume-loud-line-duotone",
+										)}
+									/>
+								</button>
 							</MessageAction>
 						</MessageActions>
 					)}

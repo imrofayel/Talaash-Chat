@@ -16,7 +16,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 type ModelOption = {
 	name: string;
@@ -59,14 +58,14 @@ export function ChatInput() {
 				} else {
 					console.warn("Invalid models data structure:", data);
 					setModelOptions([
-						{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" },
+						{ name: "Talaash Chat", slug: "deepseek/deepseek-chat:free" },
 					]);
 				}
 			} catch (error) {
 				console.error("Error fetching models:", error);
 
 				setModelOptions([
-					{ name: "Raya v1", slug: "deepseek/deepseek-chat:free" },
+					{ name: "Talaash Chat", slug: "deepseek/deepseek-chat:free" },
 				]);
 			}
 		};
@@ -82,13 +81,12 @@ export function ChatInput() {
 
 	function getModelNameBySlug(slug: string): string {
 		const found = modelOptions.find((m) => m.slug === slug);
-		return found ? found.name.replace(/\s*\(.*\)$/, "") : "Raya v3"; // fallback to slug if name not found
+		return found ? found.name.replace(/\s*\(.*\)$/, "") : "Talaash Chat"; // fallback to slug if name not found
 	}
 
 	const handleSubmit = async () => {
 		if (!input.trim() || isStreaming) return;
 
-		// Abort previous request if exists
 		abortController.current?.abort();
 		abortController.current = new AbortController();
 
@@ -128,14 +126,12 @@ export function ChatInput() {
 					const chunk = decoder.decode(value, { stream: true });
 
 					try {
-						// Check if the chunk is a valid JSON (for sources)
 						const jsonData = JSON.parse(chunk);
 						if (jsonData.content) {
 							accumulatedText = jsonData.content;
 							updateLastMessage(accumulatedText);
 						}
 					} catch {
-						// If not valid JSON, treat as text chunk
 						accumulatedText += chunk;
 						updateLastMessage(accumulatedText);
 					}
@@ -152,13 +148,6 @@ export function ChatInput() {
 
 \`\`\`bash
 ${error}
-\`\`\`
-
-\`\`\`mermaid
-graph TD;
-  A-->B;  A-->C;
-  B-->D;
-  C-->D;
 \`\`\`
 
 `);
@@ -187,11 +176,11 @@ graph TD;
 				onValueChange={handleValueChange}
 				isLoading={isStreaming}
 				onSubmit={handleSubmit}
-				className="relative flex h-full border cursor-text bg-[#fcf8f2] w-full justify-center items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none rounded-[30px]"
+				className="relative flex h-full border cursor-text bg-white drop-shadow-xs w-full justify-center border-[#899c8d] items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none p-1 rounded-[30px]"
 			>
 				<PromptInputTextarea
-					placeholder="Talk with Raya!"
-					className="t-body-chat geist block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-primary-700 outline-none placeholder:opacity-100 !border-none placeholder:text-[#c4b7a4] placeholder:!text-[23px] !text-[20px]"
+					placeholder="What’s up?"
+					className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-[#435346] outline-none placeholder:opacity-100 !border-none placeholder:text-[#435346] placeholder:!text-[21px] !text-[20px]"
 					rows={2}
 				/>
 
@@ -199,19 +188,34 @@ graph TD;
 					size="icon"
 					aria-label={isStreaming ? "Stop response" : "Send message"}
 					className={cn(
-						"rounded-full transition-all duration-600 shadow-none font-semibold !text-gray-950 disabled:opacity-100",
-						isStreaming
-							? "[&_svg]:!size-5 bg-[#faf3ea] hover:bg-[#faf3ea]"
-							: "[&_svg]:!size-5.5",
-
-						input.trim() === ""
-							? "bg-[#faf3ea] !text-black/80"
-							: "bg-[#038247] hover:bg-[#038247] !text-white",
+						"rounded-full z-50 cursor-pointer transition-all duration-600 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] border-[#899c8d]",
 					)}
 					onClick={isStreaming ? handleStop : handleSubmit}
 					disabled={!isStreaming && !input.trim()}
 				>
-					{isStreaming ? <Square className="[&_svg]:!size-5" /> : <ArrowUp />}
+					{isStreaming ? (
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="1.5em"
+							viewBox="0 0 24 24"
+						>
+							<title>Loading</title>
+							<path
+								fill="#73c496"
+								d="M12,23a9.63,9.63,0,0,1-8-9.5,9.51,9.51,0,0,1,6.79-9.1A1.66,1.66,0,0,0,12,2.81h0a1.67,1.67,0,0,0-1.94-1.64A11,11,0,0,0,12,23Z"
+							>
+								<animateTransform
+									attributeName="transform"
+									dur="0.75s"
+									repeatCount="indefinite"
+									type="rotate"
+									values="0 12 12;360 12 12"
+								/>
+							</path>
+						</svg>
+					) : (
+						<div className="i-solar:arrow-up-linear text-[24px] hover:-top-0.5 relative" />
+					)}
 				</Button>
 			</PromptInput>
 
@@ -223,7 +227,7 @@ graph TD;
 								variant="ghost"
 								aria-label="Select Model"
 								disabled={!isModelSelectionEnabled}
-								className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]cursor-pointer rounded-xl ${
+								className={`max-h-fit w-auto gap-1  text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] border-[#899c8d] border !py-0.5 !px-2 ${
 									isModelSelectionEnabled ? "opacity-100" : "opacity-30"
 								}`}
 							>
@@ -233,7 +237,7 @@ graph TD;
 						</DropdownMenuTrigger>
 						<DropdownMenuContent
 							align="start"
-							className="rounded-xl overflow-auto bg-white/60 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none text-[17px] text-[#0d3c26]"
+							className="rounded-2xl overflow-auto bg-white/90 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none drop-shadow-xs text-[17px] text-[#435346]"
 							style={{ maxHeight: "200px" }}
 						>
 							{modelOptions.map((modelOption) => (
@@ -241,7 +245,7 @@ graph TD;
 									key={modelOption.slug}
 									onClick={() => setModel(modelOption.slug)}
 									disabled={!isModelSelectionEnabled}
-									className="hover:!bg-[#faf3ea] rounded-lg"
+									className="hover:!bg-[#e5f0df] hover:border hover:border-[#899c8d] hover:!text-[#435346] rounded-lg"
 								>
 									{modelOption.name.replace(/\s*\(.*\)$/, "")}
 								</DropdownMenuItem>
@@ -255,7 +259,7 @@ graph TD;
 						<Button
 							variant="ghost"
 							aria-label="Select Model"
-							className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#0d3c26] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#0d3c26] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
+							className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#435346] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
 						>
 							Image Generator
 						</Button>
