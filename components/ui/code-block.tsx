@@ -120,10 +120,10 @@ function CodeBlockCode({
 
 	return (
 		<div className="relative group">
-			<div className="absolute right-2 top-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+			<div className="absolute right-2 top-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
 				<button
 					onClick={handleCopy}
-					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] p-1.5 border-[#899c8d]"
+					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 !text-[#435346] p-1.5 border-[#899c8d]"
 					title="Copy Code"
 					type="button"
 				>
@@ -131,7 +131,7 @@ function CodeBlockCode({
 				</button>
 				<button
 					onClick={handleDownload}
-					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] p-1.5 border-[#899c8d]"
+					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100  !text-[#435346] p-1.5 border-[#899c8d]"
 					title="Download Code"
 					type="button"
 				>

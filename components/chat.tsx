@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/message";
 import { cn } from "@/lib/utils";
 import { useChatStore } from "@/store/chat";
-import { Copy, Volume2Icon } from "lucide-react";
 import { useRef } from "react";
 import { stripMarkdown } from "@/lib/utils";
 
@@ -50,8 +49,11 @@ export function Chat() {
 		<ChatContainer className="flex gap-3 scrollbar-hidden !text-[#435346] !pb-[120px] pt-6 px-2 alpina w-full z-10">
 			{messages.length === 0 && (
 				<div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
-					<p className="text-center text-4xl text-muted-foreground fraunces">
+					<p className="text-center text-3xl !text-[#5e7e5f] fraunces">
 						Your friendly AI!
+						<p className="geist font-normal text-[19px] my-5 bg-[#e5f0df] p-1 rounded-lg border border-[#899c8d] px-1.5 text-[#435346]">
+							Some of the models may not work due to API issues.
+						</p>
 					</p>
 				</div>
 			)}

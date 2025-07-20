@@ -16,6 +16,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { getModelIcon } from "@/lib/provider-icons";
 
 type ModelOption = {
 	name: string;
@@ -227,10 +228,28 @@ ${error}
 								variant="ghost"
 								aria-label="Select Model"
 								disabled={!isModelSelectionEnabled}
-								className={`max-h-fit w-auto gap-1  text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] border-[#899c8d] border !py-0.5 !px-2 ${
+								className={`max-h-fit w-auto gap-1.5  text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] border-[#899c8d] border !py-1 !px-2 !pl-2.5 ${
 									isModelSelectionEnabled ? "opacity-100" : "opacity-30"
 								}`}
 							>
+								{/** biome-ignore lint/performance/noImgElement: <> */}
+								<img
+									src={getModelIcon(getModelNameBySlug(model))}
+									alt="Provider Icon"
+									width="20px"
+									className={cn(
+										(getModelIcon(getModelNameBySlug(model)).includes(
+											"deepseek",
+										) ||
+											getModelIcon(getModelNameBySlug(model)).includes(
+												"qwen",
+											) ||
+											getModelIcon(getModelNameBySlug(model)).includes(
+												"meta",
+											)) &&
+											"w-[23px]",
+									)}
+								/>
 								{getModelNameBySlug(model)}
 								<ChevronDown className="h-3 w-3" />
 							</Button>
@@ -247,7 +266,26 @@ ${error}
 									disabled={!isModelSelectionEnabled}
 									className="hover:!bg-[#e5f0df] hover:border hover:border-[#899c8d] hover:!text-[#435346] rounded-lg"
 								>
-									{modelOption.name.replace(/\s*\(.*\)$/, "")}
+									{/* getModelIcon */}
+									{
+										<div className="flex items-center gap-2">
+											{/** biome-ignore lint/performance/noImgElement: <> */}
+											<img
+												src={getModelIcon(modelOption.name)}
+												alt="Provider Icon"
+												width="20px"
+												className={cn(
+													(getModelIcon(modelOption.name).includes(
+														"deepseek",
+													) ||
+														getModelIcon(modelOption.name).includes("qwen") ||
+														getModelIcon(modelOption.name).includes("meta")) &&
+														"w-[23px]",
+												)}
+											/>
+											{modelOption.name.replace(/\s*\(.*\)$/, "")}
+										</div>
+									}
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>

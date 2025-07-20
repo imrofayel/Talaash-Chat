@@ -17,10 +17,7 @@
 @custom-variant dark (&:is(.dark *));
 
 .geist {
-	::placeholder {
-		font-family: "GT Alpina Trial", sans-serif !important;
-	}
-	/* font-family: "Geist", sans-serif; */
+	font-family: "Geist", sans-serif;
 	font-optical-sizing: auto;
 	font-style: normal;
 }
