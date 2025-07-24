@@ -108,4 +108,4 @@ This project is licensed under the MIT License.
 
 ## 💚 _Maintainers_
 
-Developed and maintained by [_Adam Rofayel_](https://github.com/imrofayel) and the _open source community_.
+Developed and maintained by [_Naveed Azhar_](https://github.com/imrofayel) and the _open source community_.
