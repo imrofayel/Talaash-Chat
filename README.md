@@ -36,6 +36,10 @@ OPENAI_API_KEY=<your-openrouter-api-key>
 pnpm dev
 ```
 
+5. _Deploy_ on _Vercel_
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/project?template=https://github.com/imrofayel/talaash-chat)
+
 ## 🔥 _Project Structure_
 
 ```bash
