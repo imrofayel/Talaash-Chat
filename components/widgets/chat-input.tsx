@@ -152,7 +152,7 @@ export function ChatInput() {
 		} catch (error: unknown) {
 			if (error instanceof Error && error.name === "AbortError") return;
 			console.error("Chat Error:", error);
-			updateLastMessage(`Sorry, \`something\` went wrong!
+			updateLastMessage(`Sorry, something went wrong!
 
 \`\`\`bash
 ${error}
