@@ -4,6 +4,9 @@
 
 By combining clean design with the power of *OpenRouter’s* extensive model offerings, *Talaash* serves as a versatile platform for both end-users and developers seeking to integrate or extend LLM capabilities.
 
+<img width="1891" height="853" alt="Screenshot 2025-07-24 170551" src="https://github.com/user-attachments/assets/9d441b4b-2f23-4028-8851-0824414ccb6a" />
+
+
 ## ❔ _Getting Started_
 
 1. Clone the repository.
