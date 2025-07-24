@@ -14,8 +14,8 @@ function CodeBlock({ children, className, ...props }: CodeBlockProps) {
 	return (
 		<div
 			className={cn(
-				"not-prose flex w-full flex-col overflow-clip bg-white border",
-				"border-border text-card-foreground my-3",
+				"not-prose flex w-full flex-col overflow-clip border-white/10 bg-[#002b36] border",
+				"text-card-foreground my-3",
 				className,
 			)}
 			{...props}
@@ -132,7 +132,7 @@ const languageIconMap: Record<string, string> = {
 function CodeBlockCode({
 	code,
 	language = "tsx",
-	theme = "github-light",
+	theme = "solarized-dark",
 	className,
 	...props
 }: CodeBlockCodeProps) {
@@ -179,7 +179,7 @@ function CodeBlockCode({
 
 	return (
 		<div className="relative group">
-			<div className="bg-[#e5f0df] border-b border-r border-[#899c8d] drop-shadow-xs max-w-fit px-2 font-mono flex items-center !rounded-none gap-1 text-[18px] py-0.5 text-[#435346]">
+			<div className="bg-[#102e35] border-b border-r border-white/10 drop-shadow-xs max-w-fit px-2 font-mono flex items-center !rounded-none gap-1 text-[18px] py-0.5 text-white/85">
 				<div
 					className={cn(
 						iconClass,
@@ -191,10 +191,10 @@ function CodeBlockCode({
 				code.{extension}
 			</div>
 
-			<div className="absolute right-2 top-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+			<div className="absolute right-2 top-2 flex gap-1 opacity-100 group-hover:opacity-100 transition-opacity">
 				<button
 					onClick={handleCopy}
-					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 !text-[#435346] p-1.5 border-[#899c8d] hover:bg-gray-100" // Added hover effect
+					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 !text-white/50 p-1.5 border-white/10 hover:bg-black/20 backdrop-blur-2xl" // Added hover effect
 					title="Copy Code"
 					type="button"
 				>
@@ -202,7 +202,7 @@ function CodeBlockCode({
 				</button>
 				<button
 					onClick={handleDownload}
-					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100  !text-[#435346] p-1.5 border-[#899c8d] hover:bg-gray-100" // Added hover effect
+					className="rounded-xl z-50 cursor-pointer transition-all duration-600 scale-95 shadow-none font-semibold disabled:opacity-100 !text-white/50 p-1.5 border-white/10 hover:bg-black/20 backdrop-blur-2xl" // Added hover effect
 					title="Download Code"
 					type="button"
 				>

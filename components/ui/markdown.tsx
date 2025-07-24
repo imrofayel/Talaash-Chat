@@ -34,7 +34,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
 			return (
 				<span
 					className={cn(
-						"!bg-red-50 text-red-700 p-1 !rounded-md px-1 font-mono !text-[17px]",
+						"!bg-red-50 text-red-700 dark:!bg-red-50/5 dark:text-red-300 p-1 !rounded-lg px-1 font-mono !text-[16px]",
 						className,
 					)}
 					{...props}
@@ -96,7 +96,7 @@ function MarkdownComponent({
 		<div
 			className={cn(
 				className,
-				"prose-p:py-2 prose-table:overflow-x-auto prose-table:block prose-h2:text-[28px] prose-h3:text-[24px] prose-headings:py-3 prose-h4:text-[24px] prose-h5:text-[23px] prose-h6:text-[21px]  prose-h1:italic prose-h2:italic prose-h1:text-[30px] prose-strong:font-medium prose-blockquote:italic prose-blockquote:!text-[25px] prose-blockquote:bg-white/30 prose-blockquote:my-2 prose-blockquote:pl-6 prose-blockquote:py-2 prose-hr:border-[#435346] prose-hr:my-4 prose-hr:border-[1.4px] prose-table:w-full  prose-td:border prose-td:p-2 prose-th:border prose-th:p-2 prose-th:bg-white/20 prose-table:border-collapse prose-th:font-medium prose-th:text-[23px] prose-table:bg-white/30 prose-table:my-3   prose-ol:text-[21px] prose-ul:text-[21px] prose-li:py-2 prose-ul:py-1 prose-ol:py-1 prose-th:italic prose-hr:hidden prose-p:text-[21px] prose-tr:text-[21px] list-decimal",
+				"prose-p:py-2 prose-table:overflow-x-auto prose-table:block prose-h2:text-[28px] prose-h3:text-[24px] prose-headings:py-3 prose-h4:text-[24px] prose-h5:text-[23px] prose-h6:text-[21px]  prose-h1:italic prose-h2:italic prose-h1:text-[30px] prose-strong:font-medium prose-blockquote:italic prose-blockquote:!text-[25px] prose-blockquote:bg-white/30 prose-blockquote:my-2 prose-blockquote:pl-6 prose-blockquote:py-2 prose-hr:border-[#435346] prose-hr:my-4 prose-hr:border-[1.4px] prose-table:w-full  prose-td:border prose-td:p-2 prose-th:border prose-th:p-2 prose-th:bg-white/20 prose-table:border-collapse prose-th:font-medium prose-th:text-[23px] prose-table:bg-white/30 prose-table:my-3   prose-ol:text-[21px] prose-ul:text-[21px] prose-li:py-2 prose-ul:py-1 prose-ol:py-1 prose-th:italic prose-hr:hidden prose-p:text-[21px] dark:text-white/80 prose-tr:text-[21px] list-decimal",
 			)}
 		>
 			{blocks.map((block) => (

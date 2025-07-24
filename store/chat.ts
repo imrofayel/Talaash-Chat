@@ -60,7 +60,7 @@ export const useChatStore = create<ChatStore>((set) => ({
 	setIsStreaming: (streaming) => set({ isStreaming: streaming }),
 	mode: "chat", // Default mode is chat
 	setMode: (mode) => set({ mode: mode }),
-	model: "deepseek/deepseek-chat:free", // Default model
+	model: "mistralai/mistral-7b-instruct:free", // Default model
 	setModel: (model) => set({ model: model }),
 	isReading: false,
 	stopReading: () => {

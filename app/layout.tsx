@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
 	title: "Talaash - your friendly AI.",
@@ -15,12 +15,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body>
-				<SidebarProvider>
+				<ThemeProvider attribute="class" defaultTheme="light">
 					{children}
-					<Analytics />
-				</SidebarProvider>
+				</ThemeProvider>
+				<Analytics />
 			</body>
 		</html>
 	);
