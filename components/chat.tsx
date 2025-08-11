@@ -21,6 +21,18 @@ export function Chat() {
 		navigator.clipboard.writeText(content);
 	};
 
+	const handleNewChat = () => {
+		const confirmed = window.confirm(
+			"Are you sure you want to start a new chat? This will erase the current conversation.",
+		);
+		if (confirmed) {
+			useChatStore.setState({
+				messages: [],
+				input: "",
+			});
+		}
+	};
+
 	const handleRead = (content: string) => {
 		if (isReading) {
 			stopReading();
@@ -46,7 +58,19 @@ export function Chat() {
 	};
 
 	return (
-		<ChatContainer className="flex gap-3 scrollbar-hidden  !text-[#435346] !pb-[120px] pt-6 px-2 alpina w-full z-10">
+		<ChatContainer className="flex flex-col gap-3 scrollbar-hidden !text-[#435346] !pb-[120px] pt-6 px-2 alpina w-full z-10">
+			<div className="flex justify-end mb-4 px-2">
+				<button
+					type="button"
+					onClick={handleNewChat}
+					className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-sm font-medium
+			bg-[#d0dbcc] text-gray-900 border-[#b2c1ab] hover:bg-[#c4d0bc]
+			dark:bg-[#2d3a2c] dark:text-gray-100 dark:border-[#4a5b48] dark:hover:bg-[#3a4b39]
+			transition-colors duration-200"
+				>
+					New Chat
+				</button>
+			</div>
 			{messages.length === 0 && (
 				<div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
 					<p className="text-center text-3xl !text-[#5e7e5f] dark:!text-white/80 fraunces">
