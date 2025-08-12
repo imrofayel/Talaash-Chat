@@ -1,5 +1,5 @@
 import type { ChatMessage } from "@/lib/openai";
-import { jsPDF } from "jspdf";
+import { marked } from "marked";
 
 export function exportAsJSON(messages: ChatMessage[]) {
 	if (!messages.length) return;
@@ -33,35 +33,45 @@ export function exportAsMarkdown(messages: ChatMessage[]) {
 	downloadFile(markdown, `chat-${getDate()}.md`, "text/markdown");
 }
 
-export function exportAsPDF(messages: ChatMessage[]) {
+export async function exportAsPDF(messages: ChatMessage[]) {
 	if (!messages.length) return;
+
 	const markdown = generateMarkdown(messages);
+	const html = await marked.parse(markdown);
 
-	const doc = new jsPDF({ unit: "pt", format: "a4" });
-	const margin = 40;
-	const maxWidth = doc.internal.pageSize.getWidth() - 80;
-	let y = margin;
+	const htmlContent = `
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<meta charset="UTF-8">
+			<title>Chat Export</title>
+			<style>
+				body { font-family: system-ui; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+				blockquote { border-left: 4px solid #007acc; padding-left: 20px; color: #333; background: #f9f9f9; margin: 10px 0; }
+				code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
+				pre { background: #2d2d2d; color: white; padding: 15px; border-radius: 5px; }
+				.model { color: #666; font-size: 0.9em; text-align: right; margin-bottom: 20px; }
+			</style>
+		</head>
+		<body>
+			<h1>Chat Export - ${getDate()}</h1>
+			${html}
+		</body>
+		</html>
+	`;
 
-	doc.setFontSize(12);
-	doc.text(`Chat Export - ${new Date().toLocaleDateString()}`, margin, y);
-	y += 30;
+	const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+	const url = URL.createObjectURL(blob);
 
-	doc.setFontSize(10);
-	const lines = markdown.split("\n");
-
-	lines.forEach((line) => {
-		if (y > doc.internal.pageSize.getHeight() - 60) {
-			doc.addPage();
-			y = margin;
-		}
-		const wrappedLines = doc.splitTextToSize(line || " ", maxWidth);
-		wrappedLines.forEach((wrappedLine: string) => {
-			doc.text(wrappedLine, margin, y);
-			y += 14;
-		});
-	});
-
-	doc.save(`chat-${getDate()}.pdf`);
+	const printWindow = window.open(url, "_blank");
+	if (printWindow) {
+		printWindow.onload = () => {
+			setTimeout(() => {
+				printWindow.print();
+				URL.revokeObjectURL(url);
+			}, 100);
+		};
+	}
 }
 
 function downloadFile(content: string, filename: string, type: string) {
