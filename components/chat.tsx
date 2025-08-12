@@ -12,6 +12,18 @@ import { useChatStore } from "@/store/chat";
 import { useRef } from "react";
 import { stripMarkdown } from "@/lib/utils";
 
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 export function Chat() {
 	const { messages, isReading, stopReading, voice, voiceRate, voicePitch } =
 		useChatStore();
@@ -45,8 +57,47 @@ export function Chat() {
 		window.speechSynthesis.speak(utterance);
 	};
 
+	const handleNewChat = () => {
+		useChatStore.setState({ messages: [] });
+	};
+
 	return (
-		<ChatContainer className="flex gap-3 scrollbar-hidden  !text-[#435346] !pb-[120px] pt-6 px-2 alpina w-full z-10">
+		<ChatContainer className="flex flex-col gap-3 scrollbar-hidden !text-[#435346] !pb-[120px] pt-6 px-2 alpina w-full z-10">
+			{/* New Chat button aligned left */}
+			<div className="flex justify-start px-2 mb-3">
+				<AlertDialog>
+					<AlertDialogTrigger asChild>
+						<button
+							type="button"
+							className="flex items-center gap-2 bg-[#e5f0df] border border-[#899c8d] dark:!bg-emerald-900/50 dark:border-white/10 dark:text-white/85 text-[#435346] px-3 py-1.5 rounded-full shadow-sm hover:opacity-80 transition"
+						>
+							<div className="i-solar:chat-round-refresh-line-duotone text-lg" />
+							New Chat
+						</button>
+					</AlertDialogTrigger>
+					<AlertDialogContent className="bg-[#e5f0df] dark:!bg-emerald-900/50 border border-[#899c8d] dark:border-white/10">
+						<AlertDialogHeader>
+							<AlertDialogTitle className="text-[#435346] dark:text-white/85">
+								Start a new conversation?
+							</AlertDialogTitle>
+							<AlertDialogDescription className="text-[#435346] dark:text-white/70">
+								This will clear the current chat history and start fresh.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel className="bg-transparent border border-[#899c8d] dark:border-white/20 text-[#435346] dark:text-white/85 hover:opacity-80">
+								Cancel
+							</AlertDialogCancel>
+							<AlertDialogAction
+								onClick={handleNewChat}
+								className="bg-[#5e7e5f] text-white hover:opacity-90"
+							>
+								Confirm
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+			</div>
 			{messages.length === 0 && (
 				<div className="flex flex-col gap-3 w-full h-[200px] items-center justify-center">
 					<p className="text-center text-3xl !text-[#5e7e5f] dark:!text-white/80 fraunces">
