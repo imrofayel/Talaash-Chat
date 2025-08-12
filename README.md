@@ -4,6 +4,20 @@
 
 By combining clean design with the power of *OpenRouter’s* extensive model offerings, *Talaash* serves as a versatile platform for both end-users and developers seeking to integrate or extend LLM capabilities.
 
+---
+## 📑 Table of Contents
+- [Getting Started](#-getting-started)
+- [How to Run the Code](#-how-to-run-the-code)
+- [Testing](#-testing)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [FAQ](#-frequently-asked-questions-faq)
+- [License](#octocat-license)
+- [Acknowledgment](#-acknowledgment)
+- [Maintainers](#-maintainers)
+
+---
+
 <img width="1891" height="853" alt="Screenshot 2025-07-24 170551" src="https://github.com/user-attachments/assets/9d441b4b-2f23-4028-8851-0824414ccb6a" />
 
 
@@ -43,33 +57,75 @@ pnpm dev
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/project?template=https://github.com/imrofayel/talaash-chat)
 
+---
+
+## 🧪 Testing
+Below are screenshots of some of the tests done to ensure the Smooth flow of app:
+
+1. Start Page
+![Start Page](Screenshots/StartPage.png)
+
+2. Response To Greeting
+![Hello](Screenshots/Hi.png)
+
+3. Question about its Creator
+![Who Created You?](Screenshots/Wcu.png)
+
+4. Technical Question
+![Mern Stack](Screenshots/Wims.png)
+
+---
+
 ## 🔥 _Project Structure_
-
-```bash
-/app              # App router layout and route segments (Next.js App Router)
-
-/components       # Reusable UI components (chat interface, buttons, layout blocks, etc.)
-
-/hooks            # Custom React hooks for local state and side effects
-
-/lib              # Utility functions
-
-/store            # Global state management (e.g., current model)
-
-/types            # TypeScript interfaces and type declarations
-
-/public           # Static assets (icons, logos, fonts, etc.)
-
-/styles           # Tailwind CSS configuration and global styles
-
-/.vscode          # Workspace-specific VS Code settings
-
-/.husky           # Git hooks (e.g., pre-commit checks)
 ```
+TALAASH-CHAT
+├── .husky              # Git hooks
+├── .vscode             # VS Code settings
+├── app                 # Next.js App Router pages and layout
+│   ├── api
+│   ├── imagine
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components          # Reusable UI components
+│   ├── ui
+│   ├── widgets
+│   ├── app-sidebar.tsx
+│   ├── chat.tsx
+│   ├── mermaid.tsx
+│   ├── search-form.tsx
+│   ├── search-results.tsx
+│   ├── source-display.tsx
+│   └── theme-switchr.tsx
+├── hooks               # Custom hooks
+│   └── use-mobile.ts
+├── lib                 # Utility functions
+│   ├── openai.ts
+│   ├── parse-thinking.ts
+│   ├── provider-icons.ts
+│   └── utils.ts
+├── store               # State management
+├── types               # TypeScript type definitions
+│   └── chat.d.ts
+├── .gitignore
+├── biome.json
+├── components.json
+├── LICENSE
+├── next.config.ts
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── README.md
+├── tsconfig.json
+└── unocss.config.ts
+```
+---
 
 ## 👥 _Contributing_
 
 We welcome and encourage community contributions. Whether it is a bug fix, feature enhancement, UI refinement, or performance optimization — your input is valuable.
+---
 
 ### _How to Contribute?_
 
@@ -95,6 +151,8 @@ We welcome and encourage community contributions. Whether it is a bug fix, featu
    
 6. Open a _pull request_ with a clear explanation of your changes.
 
+---
+
 ## ⁉️ _Frequently Asked Questions (FAQ)_
 
 > *Q1: Can I use paid models like Claude Pro or GPT-4 with Talaash?*
@@ -109,10 +167,20 @@ Yes, *Talaash* is open source under the *MIT license*. You are free to use, modi
 
 No. *Talaash* is frontend-only and communicates directly with *OpenRouter’s* hosted API. However, you can modify the code to point to your own proxy or LLM gateway if needed.
 
+
+---
+
 ## :octocat: _License_
 
 This project is licensed under the MIT License.
 
+---
 ## 💚 _Maintainers_
 
 Developed and maintained by [_Naveed Azhar_](https://github.com/imrofayel) and the _open source community_.
+
+- 💼 **GitHub:** [imrofayel](https://github.com/imrofayel)  
+- 📧 **Email:** [adamrofayel@gmail.com](mailto:adamrofayel@gmail.com)  
+- ✉️ **LinkedIn:** [Naveed Azhar](https://www.linkedin.com/in/rofayel/)
+
+---
