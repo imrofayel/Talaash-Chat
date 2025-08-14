@@ -39,7 +39,7 @@ All complaints will be reviewed and investigated promptly and fairly. The team i
 ### For GSSoC Contributors
 Instances of abusive, harassing, or otherwise unacceptable behavior can be reported to:  
 📧 [gssoc@girlscript.tech](mailto:gssoc@girlscript.tech)  
-💬 Backup contact via Discord: [GSSoC 2025 Server](https://discord.com/channels/1378815292729327728/1390011139529642004)
+💬 Backup contact via Discord: Join the [GSSoC 2025 Server](<YOUR_SERVER_INVITE_LINK_HERE>)
 
 ## 📖 Enforcement Guidelines
 
