@@ -18,6 +18,17 @@ import {
 import { cn } from "@/lib/utils";
 import { getModelIcon } from "@/lib/provider-icons";
 import { useTheme } from "next-themes";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 type ModelOption = {
 	name: string;
@@ -179,6 +190,10 @@ ${error}
 
 	const { theme } = useTheme();
 
+	const handleNewChat = () => {
+		useChatStore.setState({ messages: [] });
+	};
+
 	return (
 		<div className="md:w-[80%] w-[97%] absolute bottom-4 flex flex-col justify-center items-center z-20">
 			<PromptInput
@@ -231,7 +246,7 @@ ${error}
 			</PromptInput>
 
 			<PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
-				<div className="flex items-start flex-wrap gap-2">
+				<div className="flex items-start justify-between flex-wrap w-full gap-2">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
 							<Button
@@ -304,6 +319,41 @@ ${error}
 							))}
 						</DropdownMenuContent>
 					</DropdownMenu>
+
+					<div className="flex justify-start px-2 mb-3">
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<button
+									type="button"
+									className="max-h-fit w-auto gap-1.5  text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border items-center !py-1 !px-2 !pl-2.5 flex"
+								>
+									<div className="i-solar:chat-square-line-duotone text-[20px]" />
+									New Chat
+								</button>
+							</AlertDialogTrigger>
+							<AlertDialogContent className="bg-white/80 backdrop-blur-2xl dark:!bg-emerald-900/50 border border-[#899c8d] rounded-3xl shadow-none dark:border-white/10">
+								<AlertDialogHeader>
+									<AlertDialogTitle className="text-[#435346] fraunces text-2xl dark:text-white/85">
+										New conversation?
+									</AlertDialogTitle>
+									<AlertDialogDescription className="text-[#435346] text-base dark:text-white/70">
+										This will clear the current chat history and start fresh.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel className="bg-transparent border border-[#899c8d] drop-shadow-none rounded-2xl !shadow-none dark:border-white/20 text-[#435346] dark:text-white/85 hover:opacity-80 text-base">
+										Cancel
+									</AlertDialogCancel>
+									<AlertDialogAction
+										onClick={handleNewChat}
+										className="bg-[#5e7e5f] text-white hover:opacity-90 drop-shadow-none rounded-2xl !shadow-none dark:border-white/20 dark:text-white/85  text-base"
+									>
+										Confirm
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
+					</div>
 
 					{/* Image Generator - Disabled for now due to cost of API */}
 
