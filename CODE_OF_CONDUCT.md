@@ -39,7 +39,7 @@ All complaints will be reviewed and investigated promptly and fairly. The team i
 ### For GSSoC Contributors
 Instances of abusive, harassing, or otherwise unacceptable behavior can be reported to:  
 📧 [gssoc@girlscript.tech](mailto:gssoc@girlscript.tech)  
-💬 Backup contact via Discord: Join the [GSSoC 2025 Server](<YOUR_SERVER_INVITE_LINK_HERE>)
+💬 Backup contact via Discord: Join the [GSSoC 2025 Server](https://discord.com/invite/BjdgNbPMJR)
 
 ## 📖 Enforcement Guidelines
 
@@ -56,8 +56,8 @@ Instances of abusive, harassing, or otherwise unacceptable behavior can be repor
 - Respect project admins, mentors, and fellow participants throughout the program.  
 
 ## 📜 Attribution
-This Code of Conduct is adapted from the [Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html).  
-Enforcement guidelines inspired by [Mozilla’s code of conduct enforcement ladder](https://www.mozilla.org/en-US/about/governance/policies/participation/enforcement/).
+This Code of Conduct is adapted from the [Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).  
+Enforcement guidelines inspired by [Mozilla's code of conduct enforcement ladder](https://github.com/mozilla/inclusion/blob/master/code-of-conduct-enforcement/consequence-ladder.md).
 
 ---
 
