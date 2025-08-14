@@ -7,6 +7,8 @@ type ModelType = string;
 
 type ChatStore = {
 	messages: ChatMessage[];
+	input: string;
+	setInput: (input: string) => void;
 	addMessage: (
 		content: string,
 		role: ChatMessage["role"],
@@ -31,6 +33,8 @@ type ChatStore = {
 
 export const useChatStore = create<ChatStore>((set) => ({
 	messages: [],
+	input: "",
+	setInput: (input) => set({ input }),
 	addMessage: (content, role, model) =>
 		set((state) => ({
 			messages: [
