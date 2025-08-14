@@ -33,7 +33,7 @@ This Code of Conduct applies across all community spaces — including GitHub re
 
 ### For All Contributors
 Instances of abusive, harassing, or otherwise unacceptable behavior can be reported through our GitHub Issues page:  
-📌 [Report an Issue](https://github.com/imrofayel/Talaash-Chat/issues/10)  
+📌 [Report an Issue](https://github.com/imrofayel/Talaash-Chat/issues/new)  
 All complaints will be reviewed and investigated promptly and fairly. The team is committed to protecting the privacy and safety of the reporter.
 
 ### For GSSoC Contributors
