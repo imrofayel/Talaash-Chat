@@ -2,6 +2,7 @@ import { ChatInput } from "@/components/widgets/chat-input";
 import { Chat } from "@/components/chat";
 import Link from "next/link";
 import ThemeSwitcher from "@/components/theme-switchr";
+import ExportMenu from "@/components/export-menu";
 
 export default function Home() {
 	return (
@@ -10,6 +11,7 @@ export default function Home() {
 				<span className="!text-[#5e7e5f] dark:!text-white/85">Talaash</span>
 
 				<div className="sm:fixed right-6 flex gap-3">
+					<ExportMenu />
 					<ThemeSwitcher />
 
 					<Link
