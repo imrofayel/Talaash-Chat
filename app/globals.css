@@ -182,6 +182,20 @@ body {
 .dark ::-webkit-scrollbar-thumb {
 	background: #05382c; /* emerald-950 */
 }
+
+/* Firefox */
+/* Default (light mode) */
+html {
+	scrollbar-width: thin;
+	scrollbar-color: #a0bb91 transparent; /* thumb, track */
+}
+
+/* Dark mode */
+body.dark,
+html.dark {
+	scrollbar-color: #05382c transparent; /* thumb, track */
+}
+
 body {
 	box-sizing: border-box;
 	font-family: "Geist", sans-serif;

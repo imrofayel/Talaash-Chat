@@ -1,4 +1,5 @@
 "use client";
+import type { ChatMessage as ChatMessageType } from "@/lib/openai";
 
 import { ChatContainer } from "@/components/ui/chat-container";
 import {
@@ -40,7 +41,7 @@ function useTypingEffect(text: string, enabled: boolean, speed = 20) {
 }
 
 // Child component that safely uses the hook
-function ChatMessage({ message }: { message: any }) {
+function ChatMessage({ message }: { message: ChatMessageType }) {
 	const { isReading, stopReading, voice, voiceRate, voicePitch } =
 		useChatStore();
 	const speakingRef = useRef<SpeechSynthesisUtterance | null>(null);

@@ -23,6 +23,7 @@ export default function Home() {
 					<Link
 						href="https://github.com/imrofayel/talaash-chat"
 						target="_blank"
+						rel="noopener noreferrer"
 						className="geist font-normal text-[19px] dark:!bg-emerald-950 bg-[#e5f0df] dark:!text-white/85 flex p-1 rounded-lg justify-center items-center border gap-1 dark:border-white/10 border-[#899c8d] px-1.5"
 					>
 						<ShinyButton>
