@@ -1,5 +1,6 @@
 "use client";
-
+import { MagicCard } from "@/components/magicui/magic-card";
+import { ShinyButton } from "@/components/magicui/shiny-button";
 import {
 	PromptInput,
 	PromptInputActions,
@@ -195,69 +196,74 @@ ${error}
 	};
 
 	return (
-		<div className="md:w-[80%] w-[97%] absolute bottom-4 flex flex-col justify-center items-center z-20">
-			<PromptInput
-				value={input}
-				onValueChange={handleValueChange}
-				isLoading={isStreaming}
-				onSubmit={handleSubmit}
-				className="relative flex h-full border cursor-text dark:bg-emerald-950/50 backdrop-blur-2xl bg-white drop-shadow-xs w-full justify-center border-[#899c8d] dark:border-white/10 items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none p-1 rounded-[30px]"
+		<div className="w-full flex flex-col justify-center items-center z-20">
+			<MagicCard
+				className="w-full rounded-[30px] shadow-md"
+				gradientSize={250}
+				gradientOpacity={0.9}
 			>
-				<PromptInputTextarea
-					placeholder="What’s up?"
-					className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-[#435346] dark:text-white/90 outline-none placeholder:opacity-100 !border-none placeholder:text-[#435346] placeholder:!text-[21px] !text-[20px] dark:placeholder:text-white/85"
-					rows={2}
-				/>
+				<div className="w-full p-[2px]">
+					<PromptInput
+						value={input}
+						onValueChange={handleValueChange}
+						isLoading={isStreaming}
+						onSubmit={handleSubmit}
+						className="relative flex h-full border cursor-text dark:bg-emerald-950/50 backdrop-blur-2xl bg-transparent drop-shadow-xs w-full justify-center border-[#899c8d] dark:border-white/10 items-center transition-all duration-500 focus-within:shadow-none hover:shadow-none p-1 rounded-[30px]"
+					>
+						<PromptInputTextarea
+							placeholder="What’s up?"
+							className="t-body-chat block w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-[#2c2f2d] dark:text-white/90 outline-none placeholder:opacity-100 !border-none placeholder:text-[#435346] placeholder:!text-[21px] !text-[20px] dark:placeholder:text-white/85"
+							rows={2}
+						/>
 
-				<Button
-					size="icon"
-					aria-label={isStreaming ? "Stop response" : "Send message"}
-					className={cn(
-						"rounded-full z-50 cursor-pointer transition-all duration-600 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] dark:!text-white/80 dark:bg-emerald-900/50 dark:border-white/10 border-[#899c8d]",
-					)}
-					onClick={isStreaming ? handleStop : handleSubmit}
-					disabled={!isStreaming && !input.trim()}
-				>
-					{isStreaming ? (
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="2em"
-							viewBox="0 0 24 24"
-							className="scale-110"
+						<Button
+							size="icon"
+							aria-label={isStreaming ? "Stop response" : "Send message"}
+							className={cn(
+								"rounded-full z-50 cursor-pointer transition-all duration-600 shadow-none font-semibold disabled:opacity-100 bg-[#e5f0df] hover:bg-[#e5f0df] border !text-[#435346] dark:!text-white/80 dark:bg-emerald-900/50 dark:border-white/10 border-[#899c8d]",
+							)}
+							onClick={isStreaming ? handleStop : handleSubmit}
+							disabled={!isStreaming && !input.trim()}
 						>
-							<title>Loading</title>
-							<path
-								fill="#73c496"
-								d="M12,23a9.63,9.63,0,0,1-8-9.5,9.51,9.51,0,0,1,6.79-9.1A1.66,1.66,0,0,0,12,2.81h0a1.67,1.67,0,0,0-1.94-1.64A11,11,0,0,0,12,23Z"
-							>
-								<animateTransform
-									attributeName="transform"
-									dur="0.75s"
-									repeatCount="indefinite"
-									type="rotate"
-									values="0 12 12;360 12 12"
-								/>
-							</path>
-						</svg>
-					) : (
-						<div className="i-solar:arrow-up-linear text-[24px] hover:-top-0.5 relative" />
-					)}
-				</Button>
-			</PromptInput>
+							{isStreaming ? (
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="2em"
+									viewBox="0 0 24 24"
+									className="scale-110"
+								>
+									<title>Loading</title>
+									<path
+										fill="#73c496"
+										d="M12,23a9.63,9.63,0,0,1-8-9.5,9.51,9.51,0,0,1,6.79-9.1A1.66,1.66,0,0,0,12,2.81h0a1.67,1.67,0,0,0-1.94-1.64A11,11,0,0,0,12,23Z"
+									>
+										<animateTransform
+											attributeName="transform"
+											dur="0.75s"
+											repeatCount="indefinite"
+											type="rotate"
+											values="0 12 12;360 12 12"
+										/>
+									</path>
+								</svg>
+							) : (
+								<div className="i-solar:arrow-up-linear text-[24px] hover:-top-0.5 relative" />
+							)}
+						</Button>
+					</PromptInput>
+				</div>
+			</MagicCard>
 
 			<PromptInputActions className="flex h-[32px] w-full justify-items-start items-start gap-2 !px-1 !my-2">
 				<div className="flex items-start justify-between flex-wrap w-full gap-2">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild disabled={!isModelSelectionEnabled}>
-							<Button
-								variant="ghost"
-								aria-label="Select Model"
+							<ShinyButton
 								disabled={!isModelSelectionEnabled}
-								className={`max-h-fit w-auto gap-1.5  text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border !py-1 !px-2 !pl-2.5 ${
+								className={`max-h-fit w-auto gap-1.5 text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border !py-1 !px-2 !pl-2.5 ${
 									isModelSelectionEnabled ? "opacity-100" : "opacity-30"
 								}`}
 							>
-								{/** biome-ignore lint/performance/noImgElement: <> */}
 								<img
 									src={getModelIcon(getModelNameBySlug(model), theme)}
 									alt="Provider Icon"
@@ -277,11 +283,12 @@ ${error}
 								/>
 								{getModelNameBySlug(model)}
 								<ChevronDown className="h-3 w-3" />
-							</Button>
+							</ShinyButton>
 						</DropdownMenuTrigger>
+
 						<DropdownMenuContent
 							align="start"
-							className="rounded-2xl overflow-auto dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border  bg-white/90 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none drop-shadow-xs text-[17px] text-[#435346]"
+							className="rounded-2xl overflow-auto dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border bg-white/90 sm:mx-0 mx-3 backdrop-blur-3xl shadow-none drop-shadow-xs text-[17px] text-[#435346]"
 							style={{ maxHeight: "200px" }}
 						>
 							{modelOptions.map((modelOption) => (
@@ -291,30 +298,26 @@ ${error}
 									disabled={!isModelSelectionEnabled}
 									className="hover:!bg-[#e5f0df] dark:!bg-emerald-950 dark:border-white/10 dark:!text-white/90 hover:border hover:border-[#899c8d] hover:!text-[#435346] dark:hover:!bg-emerald-900/50 rounded-xl"
 								>
-									{/* getModelIcon */}
-									{
-										<div className="flex items-center gap-2">
-											{/** biome-ignore lint/performance/noImgElement: <> */}
-											<img
-												src={getModelIcon(modelOption.name, theme)}
-												alt="Provider Icon"
-												width="20px"
-												className={cn(
-													(getModelIcon(modelOption.name, theme).includes(
-														"deepseek",
+									<div className="flex items-center gap-2">
+										<img
+											src={getModelIcon(modelOption.name, theme)}
+											alt="Provider Icon"
+											width="20px"
+											className={cn(
+												(getModelIcon(modelOption.name, theme).includes(
+													"deepseek",
+												) ||
+													getModelIcon(modelOption.name, theme).includes(
+														"qwen",
 													) ||
-														getModelIcon(modelOption.name, theme).includes(
-															"qwen",
-														) ||
-														getModelIcon(modelOption.name, theme).includes(
-															"meta",
-														)) &&
-														"w-[23px]",
-												)}
-											/>
-											{modelOption.name.replace(/\s*\(.*\)$/, "")}
-										</div>
-									}
+													getModelIcon(modelOption.name, theme).includes(
+														"meta",
+													)) &&
+													"w-[23px]",
+											)}
+										/>
+										{modelOption.name.replace(/\s*\(.*\)$/, "")}
+									</div>
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>
@@ -323,13 +326,13 @@ ${error}
 					<div className="flex justify-start px-2 mb-3">
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-								<button
+								<ShinyButton
 									type="button"
-									className="max-h-fit w-auto gap-1.5  text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border items-center !py-1 !px-2 !pl-2.5 flex"
+									className="max-h-fit w-auto gap-1.5 text-[#435346] hover:bg-[#fcf8f2] text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px] cursor-pointer rounded-xl drop-shadow-xs !bg-[#e5f0df] dark:!bg-emerald-950 dark:border-white/10 dark:text-white/90 border-[#899c8d] border items-center !py-1 !px-2 !pl-2.5 flex"
 								>
 									<div className="i-solar:chat-square-line-duotone text-[20px]" />
 									New Chat
-								</button>
+								</ShinyButton>
 							</AlertDialogTrigger>
 							<AlertDialogContent className="bg-white/80 backdrop-blur-2xl dark:!bg-emerald-900/50 border border-[#899c8d] rounded-3xl shadow-none dark:border-white/10">
 								<AlertDialogHeader>
@@ -346,7 +349,7 @@ ${error}
 									</AlertDialogCancel>
 									<AlertDialogAction
 										onClick={handleNewChat}
-										className="bg-[#5e7e5f] text-white hover:opacity-90 drop-shadow-none rounded-2xl !shadow-none dark:border-white/20 dark:text-white/85  text-base"
+										className="bg-[#5e7e5f] text-white hover:opacity-90 drop-shadow-none rounded-2xl !shadow-none dark:border-white/20 dark:text-white/85 text-base"
 									>
 										Confirm
 									</AlertDialogAction>
@@ -356,16 +359,15 @@ ${error}
 					</div>
 
 					{/* Image Generator - Disabled for now due to cost of API */}
-
 					{/* <Link href="/imagine">
-						<Button
-							variant="ghost"
-							aria-label="Select Model"
-							className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#435346] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
-						>
-							Image Generator
-						</Button>
-					</Link> */}
+			<Button
+				variant="ghost"
+				aria-label="Select Model"
+				className={`h-8 w-auto gap-1 bg-[#fcf8f2] text-[#435346] border p-1 !px-2 hover:bg-[#fcf8f2]  text-[17px] hover:text-[#435346] font-normal [&_svg]:!size-[18px]!cursor-pointer rounded-xl`}
+			>
+				Image Generator
+			</Button>
+			</Link> */}
 				</div>
 			</PromptInputActions>
 		</div>
