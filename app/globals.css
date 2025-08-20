@@ -79,7 +79,6 @@ code {
 .assistant-msg.t-body-chat {
 	max-width: 75%; /* narrower */
 	margin-right: auto;
-	border: 2px solid red;
 }
 
 /* User replies */
