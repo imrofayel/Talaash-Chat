@@ -19,8 +19,11 @@ export default function ExportMenu() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button size="icon">
-					<Download className="h-5 w-5" />
+				<Button
+					size="icon"
+					className=" h-10 w-10 mt-1 border  border-green-700 hover:bg-emerald-900 hover:text-white dark:border-emerald-900 dark:hover:bg-emerald-950 "
+				>
+					<Download className="h-7 w-7 " />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
